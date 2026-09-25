@@ -1545,10 +1545,10 @@ import type { DazogeProduct, DazogeSearchPage } from "../src/dazoge/types";
 
 test("normalizeName extracts volume, weight, percent and lowercased tokens across scripts", () => {
   expect(normalizeName("სანტე-რძე 2.5% 1ლ")).toEqual({ tokens: ["სანტე", "რძე"], volumeMl: 1000, weightG: null, percent: 2.5 });
-  expect(normalizeName("Sante Milk 2,5% 1 L")).toEqual({ tokens: ["სანტე", "milk"], volumeMl: 1000, weightG: null, percent: 2.5 });
+  expect(normalizeName("Sante Milk 2,5% 1 L")).toEqual({ tokens: ["სანტე", "რძე"], volumeMl: 1000, weightG: null, percent: 2.5 });
   expect(normalizeName("ყველი ბრი /Milky Lux / 1კგ")).toEqual({ tokens: ["ყველი", "ბრი", "milky", "lux"], volumeMl: null, weightG: 1000, percent: null });
-  expect(normalizeName("PALMOLIVE Milk&Olive 90 გრ.")).toEqual({ tokens: ["palmolive", "milk", "olive"], volumeMl: null, weightG: 90, percent: null });
-  expect(normalizeName("Eggs 10 pcs 500ml")).toEqual({ tokens: ["eggs", "pcs"], volumeMl: 500, weightG: null, percent: null });
+  expect(normalizeName("PALMOLIVE Milk&Olive 90 გრ.")).toEqual({ tokens: ["palmolive", "რძე", "olive"], volumeMl: null, weightG: 90, percent: null });
+  expect(normalizeName("Eggs 10 pcs 500ml")).toEqual({ tokens: ["კვერცხი", "pcs"], volumeMl: 500, weightG: null, percent: null });
 });
 
 test("scoreCandidate rewards token overlap and matching quantities", () => {
@@ -1624,8 +1624,13 @@ Expected: FAIL.
 ```ts
 export interface NormalizedName { tokens: string[]; volumeMl: number | null; weightG: number | null; percent: number | null }
 
-/** Latin brand spellings seen on Glovo mapped to the Georgian spelling Dazoge uses. Extend as mismatches appear. */
-const BRAND_ALIASES: Record<string, string> = {
+/**
+ * Latin spellings seen on Glovo mapped to the Georgian spelling Dazoge uses.
+ * Brands first, then generic food words. Extend as mismatches appear; every
+ * entry maps a Latin token to a single canonical Georgian token.
+ */
+const ALIASES: Record<string, string> = {
+  // brands
   sante: "სანტე",
   natakhtari: "ნატახტარი",
   sopeli: "სოფელი",
@@ -1633,14 +1638,27 @@ const BRAND_ALIASES: Record<string, string> = {
   koda: "კოდა",
   barambo: "ბარამბო",
   zedazeni: "ზედაზენი",
+  // generic words
+  milk: "რძე", молоко: "რძე",
+  cheese: "ყველი", сыр: "ყველი",
+  eggs: "კვერცხი", egg: "კვერცხი", яйца: "კვერცხი",
+  chicken: "ქათამი", курица: "ქათამი",
+  beef: "საქონლის", говядина: "საქონლის",
+  pork: "ღორის", свинина: "ღორის",
+  butter: "კარაქი", масло: "კარაქი",
+  yogurt: "იოგურტი", yoghurt: "იოგურტი", йогурт: "იოგურტი",
+  rice: "ბრინჯი", рис: "ბრინჯი",
+  bread: "პური", хлеб: "პური",
+  water: "წყალი", вода: "წყალი",
 };
 
-const STOP = new Set(["და", "the", "and", "with", "of", "ml", "l", "g", "kg", "gr", "ლ", "მლ", "გ", "გრ", "კგ", "ც", "pc", "pcs", "x"]);
+const STOP = new Set(["და", "the", "and", "with", "of", "ml", "l", "g", "kg", "gr", "ლ", "მლ", "გ", "გრ", "კგ", "ც", "x"]);
 
+// `\b` is ASCII-only in JS, so Georgian units need an explicit "not followed by a letter" guard.
 const NUM = "(\\d+(?:[.,]\\d+)?)";
-const VOLUME_RE = new RegExp(`${NUM}\\s*(მლ|ml|ლ|l|lt|litre|liter)\\b`, "i");
-const WEIGHT_RE = new RegExp(`${NUM}\\s*(კგ|kg|გრ|გ|g|gr)\\b`, "i");
-const PERCENT_RE = new RegExp(`${NUM}\\s*%`);
+const VOLUME_RE = new RegExp(`${NUM}\\s*(მლ|ml|ლ|l|lt|litre|liter)(?!\\p{L})`, "iu");
+const WEIGHT_RE = new RegExp(`${NUM}\\s*(კგ|kg|გრ|გ|g|gr)(?!\\p{L})`, "iu");
+const PERCENT_RE = new RegExp(`${NUM}\\s*%`, "u");
 
 const num = (s: string) => Number(s.replace(",", "."));
 
@@ -1671,7 +1689,7 @@ export function normalizeName(raw: string): NormalizedName {
     .split(/[^\p{L}\p{N}]+/u)
     .map((t) => t.trim())
     .filter((t) => t.length >= 2 && !/^\d+$/.test(t) && !STOP.has(t))
-    .map((t) => BRAND_ALIASES[t] ?? t);
+    .map((t) => ALIASES[t] ?? t);
 
   return { tokens, volumeMl, weightG, percent };
 }
@@ -2241,7 +2259,7 @@ git commit -m "feat: SQLite schema and planner repositories for pantry, meals, d
 
 - [ ] **Step 1: Extend the failing tools test**
 
-Append to `tests/tools.test.ts` (keep the existing ping test; change `connectedClient` in the helper to accept deps):
+Rewrite `tests/tools.test.ts` (replace the Task 1 ping test with the version below so no test opens `data/grocery.db`) and change `connectedClient` in the helper to accept deps:
 
 `tests/helpers/mcp.ts` becomes:
 ```ts
@@ -2283,6 +2301,12 @@ function testDeps() {
   const glovoSession = async () => ({ getAuth: async () => null, refresh: async () => null, close: async () => {} });
   return { db, dazoge, glovoSession, preferencesPath: "data/preferences.md" };
 }
+
+test("server lists ping and answers pong (rewrite of the Task 1 test so it never opens the real database)", async () => {
+  const client = await connectedClient(testDeps());
+  expect((await client.listTools()).tools.map((t) => t.name)).toContain("ping");
+  expect(textOf(await client.callTool({ name: "ping", arguments: {} }))).toBe("pong");
+});
 
 test("registers the full tool set", async () => {
   const client = await connectedClient(testDeps());
