@@ -14,8 +14,12 @@ function testDeps() {
     return new Response("nope", { status: 404 });
   }) as typeof fetch);
   const glovoSession = async () => ({ getAuth: async () => null, refresh: async () => null, close: async () => {} });
-  return { db, dazoge, glovoSession, preferencesPath: "data/preferences.md" };
+  // any test that reaches the Glovo API without its own fake fetch fails loudly instead of calling live Glovo
+  const glovoFetch = (async () => { throw new Error("live Glovo is disabled in tests"); }) as unknown as typeof fetch;
+  return { db, dazoge, glovoSession, glovoFetch, preferencesPath: "data/preferences.md" };
 }
+
+const futureAuth = (token: string) => ({ accessToken: token, expiresAt: 4102444800, userId: 1 });
 
 test("server lists ping and answers pong (rewrite of the Task 1 test so it never opens the real database)", async () => {
   const client = await connectedClient(testDeps());
@@ -40,12 +44,52 @@ test("dazoge_prices returns GEL-formatted prices per store as JSON", async () =>
   const gw = body.prices.find((p: { storeSlug: string }) => p.storeSlug === "goodwill");
   expect(gw.price).toBe("3.99 GEL");
   expect(gw.priceTetri).toBe(399);
+  expect(gw.oldPrice).toBe("6.95 GEL");
+  expect(gw.oldPriceTetri).toBe(695);
+  const cf = body.prices.find((p: { storeSlug: string }) => p.storeSlug === "carrefour");
+  expect(cf.oldPrice).toBeNull();
+  expect(cf.oldPriceTetri).toBeNull();
+});
+
+test("dazoge_search returns GEL prices with raw tetri alongside", async () => {
+  const client = await connectedClient(testDeps());
+  const body = JSON.parse(textOf(await client.callTool({ name: "dazoge_search", arguments: { query: "რძე" } })));
+  const gw = body.items.find((i: { id: string; storeSlug: string }) => i.id === "4860051001298" && i.storeSlug === "goodwill");
+  expect(gw).toMatchObject({ price: "3.99 GEL", priceTetri: 399, oldPrice: "6.95 GEL", oldPriceTetri: 695 });
 });
 
 test("glovo_session_status reports loggedIn false without a session", async () => {
   const client = await connectedClient(testDeps());
   const body = JSON.parse(textOf(await client.callTool({ name: "glovo_session_status", arguments: {} })));
   expect(body).toEqual({ loggedIn: false, hint: "Run `bun run login` in the project folder." });
+});
+
+test("glovo_session_status reports the account when the session is logged in", async () => {
+  let closed = 0;
+  const seen: string[] = [];
+  const glovoFetch = (async (input: RequestInfo | URL) => {
+    seen.push(String(input));
+    return new Response(JSON.stringify({ id: 1, name: "A", deliveredOrdersCount: 33, preferredCityCode: "TBI" }), { status: 200 });
+  }) as unknown as typeof fetch;
+  const glovoSession = async () => ({ getAuth: async () => futureAuth("t1"), refresh: async () => null, close: async () => { closed++; } });
+  const client = await connectedClient({ ...testDeps(), glovoSession, glovoFetch });
+  const body = JSON.parse(textOf(await client.callTool({ name: "glovo_session_status", arguments: {} })));
+  expect(body).toEqual({ loggedIn: true, name: "A", deliveredOrders: 33, city: "TBI" });
+  expect(seen).toEqual(["https://api.glovoapp.com/v3/me"]);
+  expect(closed).toBe(1);
+});
+
+test("glovo_session_status reports loggedIn false when Glovo rejects the token and the refreshed one", async () => {
+  let closed = 0;
+  let calls = 0;
+  const glovoFetch = (async () => { calls++; return new Response("unauthorized", { status: 401 }); }) as unknown as typeof fetch;
+  const glovoSession = async () => ({ getAuth: async () => futureAuth("t1"), refresh: async () => futureAuth("t2"), close: async () => { closed++; } });
+  const client = await connectedClient({ ...testDeps(), glovoSession, glovoFetch });
+  const res = await client.callTool({ name: "glovo_session_status", arguments: {} });
+  expect(res.isError).toBeFalsy();
+  expect(JSON.parse(textOf(res))).toEqual({ loggedIn: false, hint: "Run `bun run login` in the project folder." });
+  expect(calls).toBe(2);
+  expect(closed).toBe(1);
 });
 
 test("pantry and meal tools round trip through the server", async () => {
@@ -109,4 +153,38 @@ test("glovo_session_status closes the browser session even when the check fails"
   expect(res.isError).toBe(true);
   expect(textOf(res)).toBe("browser crashed");
   expect(closed).toBe(1);
+});
+
+const delivery = (glovoOrderId: string, placedAt?: string) => ({
+  glovoOrderId, store: "agrohub", ...(placedAt === undefined ? {} : { placedAt }),
+  items: [{ productName: "Santé milk 2.5% 1L", ingredient: "milk", qty: 1, unit: "l", priceTetri: 399 }],
+});
+
+test("delivery_record rejects a placedAt that is not an ISO datetime", async () => {
+  const client = await connectedClient(testDeps());
+  const res = await client.callTool({ name: "delivery_record", arguments: delivery("o-1", "yesterday") });
+  expect(res.isError).toBe(true);
+  expect(JSON.parse(textOf(await client.callTool({ name: "deliveries_recent", arguments: {} })))).toEqual([]);
+});
+
+test("deliveries_recent orders by real time when placedAt values carry different offsets", async () => {
+  const client = await connectedClient(testDeps());
+  // 01:00+04:00 is 21:00Z on the 24th, an hour before the second order
+  await client.callTool({ name: "delivery_record", arguments: delivery("early", "2026-09-25T01:00:00+04:00") });
+  await client.callTool({ name: "delivery_record", arguments: delivery("late", "2026-09-24T22:00:00Z") });
+  const rows = JSON.parse(textOf(await client.callTool({ name: "deliveries_recent", arguments: {} })));
+  expect(rows.map((r: { glovoOrderId: string }) => r.glovoOrderId)).toEqual(["late", "early"]);
+  expect(rows[1].placedAt).toBe("2026-09-24T21:00:00.000Z");
+  expect(rows[0].total).toBe("3.99 GEL");
+});
+
+test("tool descriptions state the units and pantry semantics Claude needs", async () => {
+  const client = await connectedClient(testDeps());
+  const desc = Object.fromEntries((await client.listTools()).tools.map((t) => [t.name, t.description ?? ""]));
+  expect(desc.price_basket).toMatch(/integer tetri/);
+  for (const field of ["unitPrice", "deliveryFee", "minOrder", "marginTetri"]) expect(desc.price_basket).toContain(field);
+  expect(desc.delivery_record).toMatch(/pantry key/);
+  expect(desc.delivery_record).toMatch(/filed under productName/);
+  expect(desc.pantry_adjust).toMatch(/floor at zero/);
+  expect(desc.pantry_adjust).toContain("stored: false");
 });
