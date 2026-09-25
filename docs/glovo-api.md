@@ -23,7 +23,19 @@ not in the fixtures. Nothing here was placed as an order: the walk stopped at th
   | `accept` | `application/json, text/plain, */*` |
 
   `glovo-device-urn`, `glovo-dynamic-session-id` and the `glovo-perseus-*` headers are
-  per-browser identifiers; the API answered our probe in Task 3 without them.
+  per-browser identifiers. `/v3/me` answers without them, but the catalog endpoints
+  (`/v3/stores/.../search`, `/v1/web/store_wall/...`) answer `503 no available server` to a
+  plain `fetch` from Bun until the request carries the browser's full header set: the
+  `glovo-*` headers above plus `glovo-app-version`, `glovo-client-info`, `user-agent`, the
+  `sec-ch-ua*` / `sec-fetch-*` client hints and the device, dynamic-session and perseus ids.
+  With that set (and freshly generated ids) Bun's `fetch` got `200`, and Playwright's
+  request context did too. A bisect for the minimal set was inconclusive because the API
+  started refusing everything mid-loop, see rate limits below. The profile keeps the real
+  ids: cookies `glv_perseus_client` and `glv_perseus_session`, local storage `glv_device`
+  and `glv_uuid`; Plan 2 should read and reuse them rather than invent ids.
+- Rate limits: about thirty search requests within a minute, each with a different
+  device id, produced `429` on every catalog call afterwards. Cache search results, send one
+  stable identity, and space requests out.
 - The access token is a JWT that lives about 20 minutes (`expiresIn: 1198`). The web app
   renews it with `POST /oauth/refresh`, body `{"refreshToken": ...}`, response
   `{accessToken, expiresIn, refreshToken, tokenType}` (fixture `oauth-refresh.json`). The
@@ -66,8 +78,27 @@ not in the fixtures. Nothing here was placed as an order: the walk stopped at th
   `store-wall-category.json`, recorded for category 22 "Shops", page two). Each entry has
   `id` (string), `title`, `slug`, `eta`, `distance`, `deliveryFee`, `availability`. The
   Agrohub identifiers observed everywhere: `storeId 169869`, `storeAddressId 595140`,
-  slug `agrohubtbi`. The mapping of other grocery stores to `StoreSlug` is still to be
-  taken from a category 4 page one call.
+  slug `agrohubtbi`. Category 4 page one (fixture `store-wall-groceries.json`, 328 stores in
+  total) gives the grocery stores that Dazoge also tracks. Glovo titles are English, so the
+  Georgian-name `storeSlug()` helper does not apply; this table is the mapping:
+
+  | Glovo title | Glovo `id` | Glovo slug | delivery fee | Dazoge `StoreSlug` |
+  |---|---|---|---|---|
+  | Agrohub | 169869 | `agrohubtbi` | 4,49₾ | `agrohub` |
+  | Carrefour | 70098 | `1carrefour-tbi` | 1,49₾ | `carrefour` |
+  | Nikora Supermarket | 37350 | `nikora-test-tbi` | 2,99₾ | (not on Dazoge) |
+  | Europroduct | 95869 | `europroduct-c-tbi` | 3,99₾ | `europroduct` |
+  | SPAR | 26609 | `spar-tbi` | 1,99₾ | `spar` |
+  | Goodwill | 96349 | `goodwill-1-tbi` | 1,49₾ | `goodwill` |
+  | Magniti | 251808 | `magniti-tbi` | 3,99₾ | `magniti` |
+  | Gvirila market | 541982 | `gvirila-market-tbi` | 5,99₾ | `gvirila` |
+  | Supta Sakhli | 45203 | `clean-house-tbi` | 1,99₾ | `suftasaxli` |
+  | Fresco | 168002 | `fresco-tbi` | 2,99₾ | (not on Dazoge) |
+
+  Each store also needs its `storeAddressId` for catalog and basket calls; only Agrohub's
+  (595140) is known. It comes from the store page load (`content/main` URL) or the order
+  detail, and Plan 2 should record it per store on first use. `2nabiji`, `psp`, `organika`,
+  `alubali`, `tursa` and `zghapari` were not on page one.
 - `GET /v1/stores/{storeId}/addresses/{storeAddressId}/node/store_fees` (fixture
   `store-fees.json`): `data.ranges[]` with `upperBound` (minimum basket, 55 GEL at Agrohub)
   and `surchargeInfo.amount` (small-basket surcharge, 3.99 GEL). The delivery fee itself
@@ -175,4 +206,9 @@ Paths use the customer id from `/v3/me`. A basket id looks like
 
 ## Session survival after idle
 
-See the "Idle check" note at the end of this file once step 11 has run.
+Checked on 2026-09-25: browser closed for 25 minutes, then `GlovoSession.launch` headless.
+The `glovo_auth_info` cookie was still in the profile with a token expired by about 10
+minutes, one `refresh()` (page load of the home page) produced a fresh 20-minute token, and
+`GET /v3/me` answered, all within 2.5 seconds. So the ruling "no refresh attempt when the
+cookie is absent" stands: Chromium keeps the cookie across idle, and an absent cookie really
+does mean a logged-out profile.

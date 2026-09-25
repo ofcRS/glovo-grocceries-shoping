@@ -1,0 +1,552 @@
+{
+  "method": "POST",
+  "url": "https://api.glovoapp.com/v1/web/store_wall/category/4?moduleId=StoreFeeds&offset=0&limit=50&handlingType=DELIVERY",
+  "endpoint": "/v1/web/store_wall/category/{id}",
+  "status": 200,
+  "contentType": "application/json",
+  "requestHeaders": {
+    "glovo-app-platform": "web",
+    "glovo-api-version": "14",
+    "glovo-location-city-code": "TBI",
+    "glovo-language-code": "en",
+    "accept": "application/json",
+    "authorization": "[REDACTED]"
+  },
+  "requestBody": {
+    "filters": [],
+    "previousStoreIds": []
+  },
+  "responseBody": {
+    "data": {
+      "category": {
+        "categoryId": 4,
+        "title": "Groceries"
+      },
+      "filters": [
+        {
+          "backgroundImage": {
+            "darkImage": "dh:customer-assets-glovo/filters/blobShortcut.png",
+            "lightImage": "dh:customer-assets-glovo/filters/blobShortcut.png"
+          },
+          "filterAttributeId": "35369",
+          "filterAttributeTitle": "Supermarket",
+          "filterId": "ADMIN_FILTERS",
+          "filterTitle": "Category",
+          "icon": {
+            "darkImage": "dh:customer-assets-glovo/filters/supermarketShortcut.png",
+            "lightImage": "dh:customer-assets-glovo/filters/supermarketShortcut.png"
+          }
+        },
+        {
+          "backgroundImage": {
+            "darkImage": "dh:customer-assets-glovo/filters/blobShortcut.png",
+            "lightImage": "dh:customer-assets-glovo/filters/blobShortcut.png"
+          },
+          "filterAttributeId": "35364",
+          "filterAttributeTitle": "Alcohol",
+          "filterId": "ADMIN_FILTERS",
+          "filterTitle": "Category",
+          "icon": {
+            "darkImage": "dh:customer-assets-glovo/filters/alcoholShortcut.png",
+            "lightImage": "dh:customer-assets-glovo/filters/alcoholShortcut.png"
+          }
+        },
+        {
+          "backgroundImage": {
+            "darkImage": "dh:customer-assets-glovo/filters/blobShortcut.png",
+            "lightImage": "dh:customer-assets-glovo/filters/blobShortcut.png"
+          },
+          "filterAttributeId": "35389",
+          "filterAttributeTitle": "Bakery",
+          "filterId": "ADMIN_FILTERS",
+          "filterTitle": "Category",
+          "icon": {
+            "darkImage": "dh:customer-assets-glovo/search_filters/0bf27b658a3d22da7887f9f137495759e9887754b9bf23008bbfcdea244d1a5f",
+            "lightImage": "dh:customer-assets-glovo/search_filters/0bf27b658a3d22da7887f9f137495759e9887754b9bf23008bbfcdea244d1a5f"
+          }
+        },
+        {
+          "backgroundImage": {
+            "darkImage": "dh:customer-assets-glovo/filters/blobShortcut.png",
+            "lightImage": "dh:customer-assets-glovo/filters/blobShortcut.png"
+          },
+          "filterAttributeId": "35711",
+          "filterAttributeTitle": "Smoking",
+          "filterId": "ADMIN_FILTERS",
+          "filterTitle": "Category",
+          "icon": {
+            "darkImage": "dh:customer-assets-glovo/search_filters/20aa3199eb844f7a237cac1f20b591a7619a1402a5980193db97d3f9000cadca",
+            "lightImage": "dh:customer-assets-glovo/search_filters/20aa3199eb844f7a237cac1f20b591a7619a1402a5980193db97d3f9000cadca"
+          }
+        },
+        {
+          "backgroundImage": {
+            "darkImage": "dh:customer-assets-glovo/filters/blobShortcut.png",
+            "lightImage": "dh:customer-assets-glovo/filters/blobShortcut.png"
+          },
+          "filterAttributeId": "34770",
+          "filterAttributeTitle": "Butcher's",
+          "filterId": "ADMIN_FILTERS",
+          "filterTitle": "Category",
+          "icon": {
+            "darkImage": "dh:customer-assets-glovo/filters/butcheryShortcut.png",
+            "lightImage": "dh:customer-assets-glovo/filters/butcheryShortcut.png"
+          }
+        },
+        {
+          "backgroundImage": {
+            "darkImage": "dh:customer-assets-glovo/filters/blobShortcut.png",
+            "lightImage": "dh:customer-assets-glovo/filters/blobShortcut.png"
+          },
+          "filterAttributeId": "35512",
+          "filterAttributeTitle": "Frozen",
+          "filterId": "ADMIN_FILTERS",
+          "filterTitle": "Category",
+          "icon": {
+            "darkImage": "dh:customer-assets-glovo/filters/frozenShortcut.png",
+            "lightImage": "dh:customer-assets-glovo/filters/frozenShortcut.png"
+          }
+        },
+        {
+          "backgroundImage": {
+            "darkImage": "dh:customer-assets-glovo/filters/blobShortcut.png",
+            "lightImage": "dh:customer-assets-glovo/filters/blobShortcut.png"
+          },
+          "filterAttributeId": "35374",
+          "filterAttributeTitle": "Fruit & Veg",
+          "filterId": "ADMIN_FILTERS",
+          "filterTitle": "Category",
+          "icon": {
+            "darkImage": "dh:customer-assets-glovo/filters/fruitsAndVegetablesShortcut.png",
+            "lightImage": "dh:customer-assets-glovo/filters/fruitsAndVegetablesShortcut.png"
+          }
+        },
+        {
+          "backgroundImage": {
+            "darkImage": "dh:customer-assets-glovo/filters/blobShortcut.png",
+            "lightImage": "dh:customer-assets-glovo/filters/blobShortcut.png"
+          },
+          "filterAttributeId": "34694",
+          "filterAttributeTitle": "International",
+          "filterId": "ADMIN_FILTERS",
+          "filterTitle": "Category",
+          "icon": {
+            "darkImage": "dh:customer-assets-glovo/search_filters/7f93820cd7eb35a5546a00a83024cac2eadfedc1b7f93c7cc307b3777399de70",
+            "lightImage": "dh:customer-assets-glovo/search_filters/7f93820cd7eb35a5546a00a83024cac2eadfedc1b7f93c7cc307b3777399de70"
+          }
+        },
+        {
+          "backgroundImage": {
+            "darkImage": "dh:customer-assets-glovo/filters/blobShortcut.png",
+            "lightImage": "dh:customer-assets-glovo/filters/blobShortcut.png"
+          },
+          "filterAttributeId": "34802",
+          "filterAttributeTitle": "Sweets",
+          "filterId": "ADMIN_FILTERS",
+          "filterTitle": "Category",
+          "icon": {
+            "darkImage": "dh:customer-assets-glovo/filters/sweetShortcut.png",
+            "lightImage": "dh:customer-assets-glovo/filters/sweetShortcut.png"
+          }
+        },
+        {
+          "backgroundImage": {
+            "darkImage": "dh:customer-assets-glovo/filters/blobShortcut.png",
+            "lightImage": "dh:customer-assets-glovo/filters/blobShortcut.png"
+          },
+          "filterAttributeId": "35518",
+          "filterAttributeTitle": "Pets",
+          "filterId": "ADMIN_FILTERS",
+          "filterTitle": "Category",
+          "icon": {
+            "darkImage": "dh:customer-assets-glovo/search_filters/665ca12be8e64b2d4a643fd41f0d3f5587b44b80e6feb2ef245321f901ee9957",
+            "lightImage": "dh:customer-assets-glovo/search_filters/665ca12be8e64b2d4a643fd41f0d3f5587b44b80e6feb2ef245321f901ee9957"
+          }
+        },
+        {
+          "backgroundImage": {
+            "darkImage": "dh:customer-assets-glovo/filters/blobShortcut.png",
+            "lightImage": "dh:customer-assets-glovo/filters/blobShortcut.png"
+          },
+          "filterAttributeId": "35710",
+          "filterAttributeTitle": "Local Market",
+          "filterId": "ADMIN_FILTERS",
+          "filterTitle": "Category",
+          "icon": {
+            "darkImage": "dh:customer-assets-glovo/filters/localMarketShortcut.png",
+            "lightImage": "dh:customer-assets-glovo/filters/localMarketShortcut.png"
+          }
+        },
+        {
+          "backgroundImage": {
+            "darkImage": "dh:customer-assets-glovo/filters/blobShortcut.png",
+            "lightImage": "dh:customer-assets-glovo/filters/blobShortcut.png"
+          },
+          "filterAttributeId": "35076",
+          "filterAttributeTitle": "Gourmet",
+          "filterId": "ADMIN_FILTERS",
+          "filterTitle": "Category",
+          "icon": {
+            "darkImage": "dh:customer-assets-glovo/filters/gourmetShortcut.png",
+            "lightImage": "dh:customer-assets-glovo/filters/gourmetShortcut.png"
+          }
+        },
+        {
+          "backgroundImage": {
+            "darkImage": "dh:customer-assets-glovo/filters/blobShortcut.png",
+            "lightImage": "dh:customer-assets-glovo/filters/blobShortcut.png"
+          },
+          "filterAttributeId": "35109",
+          "filterAttributeTitle": "Tea & coffee",
+          "filterId": "ADMIN_FILTERS",
+          "filterTitle": "Category",
+          "icon": {
+            "darkImage": "dh:customer-assets-glovo/search_filters/e58f992abb07f1009a475f1f7db06b006b30ccc032645c990fcb87dddaac38d8",
+            "lightImage": "dh:customer-assets-glovo/search_filters/e58f992abb07f1009a475f1f7db06b006b30ccc032645c990fcb87dddaac38d8"
+          }
+        },
+        {
+          "backgroundImage": {
+            "darkImage": "dh:customer-assets-glovo/filters/blobShortcut.png",
+            "lightImage": "dh:customer-assets-glovo/filters/blobShortcut.png"
+          },
+          "filterAttributeId": "35373",
+          "filterAttributeTitle": "Fishmongers",
+          "filterId": "ADMIN_FILTERS",
+          "filterTitle": "Category",
+          "icon": {
+            "darkImage": "dh:customer-assets-glovo/filters/fisheryShortcut.png",
+            "lightImage": "dh:customer-assets-glovo/filters/fisheryShortcut.png"
+          }
+        },
+        {
+          "backgroundImage": {
+            "darkImage": "dh:customer-assets-glovo/filters/blobShortcut.png",
+            "lightImage": "dh:customer-assets-glovo/filters/blobShortcut.png"
+          },
+          "filterAttributeId": "35664",
+          "filterAttributeTitle": "Bio",
+          "filterId": "ADMIN_FILTERS",
+          "filterTitle": "Category",
+          "icon": {
+            "darkImage": "dh:customer-assets-glovo/filters/organicShortcut.png",
+            "lightImage": "dh:customer-assets-glovo/filters/organicShortcut.png"
+          }
+        },
+        {
+          "backgroundImage": {
+            "darkImage": "dh:customer-assets-glovo/filters/blobShortcut.png",
+            "lightImage": "dh:customer-assets-glovo/filters/blobShortcut.png"
+          },
+          "filterAttributeId": "35093",
+          "filterAttributeTitle": "Wellness",
+          "filterId": "ADMIN_FILTERS",
+          "filterTitle": "Category",
+          "icon": {
+            "darkImage": "dh:customer-assets-glovo/filters/wellnessShortcut.png",
+            "lightImage": "dh:customer-assets-glovo/filters/wellnessShortcut.png"
+          }
+        },
+        {
+          "backgroundImage": {
+            "darkImage": "dh:customer-assets-glovo/filters/blobShortcut.png",
+            "lightImage": "dh:customer-assets-glovo/filters/blobShortcut.png"
+          },
+          "filterAttributeId": "35680",
+          "filterAttributeTitle": "Dairy",
+          "filterId": "ADMIN_FILTERS",
+          "filterTitle": "Category",
+          "icon": {
+            "darkImage": "dh:customer-assets-glovo/filters/dairyShortcut.png",
+            "lightImage": "dh:customer-assets-glovo/filters/dairyShortcut.png"
+          }
+        },
+        {
+          "backgroundImage": {
+            "darkImage": "dh:customer-assets-glovo/filters/blobShortcut.png",
+            "lightImage": "dh:customer-assets-glovo/filters/blobShortcut.png"
+          },
+          "filterAttributeId": "34747",
+          "filterAttributeTitle": "Ice cream",
+          "filterId": "ADMIN_FILTERS",
+          "filterTitle": "Category",
+          "icon": {
+            "darkImage": "dh:customer-assets-glovo/search_filters/9f69cbd86ea47cab219d0e70dbb6e278de5dddc1b07739f856565bfac099f7c5",
+            "lightImage": "dh:customer-assets-glovo/search_filters/9f69cbd86ea47cab219d0e70dbb6e278de5dddc1b07739f856565bfac099f7c5"
+          }
+        },
+        {
+          "filterAttributeId": "PICKUP",
+          "filterAttributeTitle": "Pickup",
+          "filterId": "PICKUP",
+          "filterTitle": "Pickup"
+        },
+        {
+          "filterAttributeId": "BEST_FOR_YOU",
+          "filterAttributeTitle": "Recommended",
+          "filterId": "SORT_BY",
+          "filterTitle": "Sort by",
+          "icon": {
+            "darkImage": "dh:customer-assets-glovo/filters/foryouDark.png",
+            "lightImage": "dh:customer-assets-glovo/filters/foryouLight.png"
+          }
+        },
+        {
+          "filterAttributeId": "CLOSE_TO_ME",
+          "filterAttributeTitle": "Near me",
+          "filterId": "SORT_BY",
+          "filterTitle": "Sort by",
+          "icon": {
+            "darkImage": "dh:customer-assets-glovo/filters/nearmeDark.png",
+            "lightImage": "dh:customer-assets-glovo/filters/nearmeLight.png"
+          }
+        },
+        {
+          "filterAttributeId": "RATING",
+          "filterAttributeTitle": "Ratings",
+          "filterId": "SORT_BY",
+          "filterTitle": "Sort by",
+          "icon": {
+            "darkImage": "dh:customer-assets-glovo/filters/bestratedDark.png",
+            "lightImage": "dh:customer-assets-glovo/filters/bestratedLight.png"
+          }
+        },
+        {
+          "filterAttributeId": "DELIVERY_FEE",
+          "filterAttributeTitle": "Delivery fee",
+          "filterId": "SORT_BY",
+          "filterTitle": "Sort by",
+          "icon": {
+            "darkImage": "dh:customer-assets-glovo/filters/deliveryDark.png",
+            "lightImage": "dh:customer-assets-glovo/filters/deliveryLight.png"
+          }
+        }
+      ],
+      "stores": {
+        "entries": [
+          {
+            "id": "70098",
+            "image": {
+              "lightImage": "dh:stores-glovo/stores/a163ae79100dc2d086ca9461b91256f4d71d704a6536547445961d918cb3e61f",
+              "darkImage": "dh:stores-glovo/stores/a163ae79100dc2d086ca9461b91256f4d71d704a6536547445961d918cb3e61f"
+            },
+            "logo": {
+              "lightImage": "dh:customer-assets-glovo/store_logos/9c5f57ab239eba43b58a3db8f7b6c63862fde53af07282b1179e348b2148b5ad",
+              "darkImage": "dh:customer-assets-glovo/store_logos/9c5f57ab239eba43b58a3db8f7b6c63862fde53af07282b1179e348b2148b5ad"
+            },
+            "promotions": [
+              {
+                "type": "FLAT_PRODUCT",
+                "benefit": "Promo on some items",
+                "description": "",
+                "isPrime": false
+              },
+              {
+                "type": "FREE_DELIVERY",
+                "benefit": "Free delivery offer",
+                "description": "",
+                "isPrime": false
+              }
+            ],
+            "ratings": {
+              "score": "97%",
+              "votes": "(1k+)",
+              "icon": {
+                "lightImage": "dh:customer-assets-glovo/store_ratings/rating_excellent.png",
+                "darkImage": "dh:customer-assets-glovo/store_ratings/rating_excellent_dark_icon.png"
+              }
+            },
+            "tag": "Butcher's",
+            "eta": "30-40 min",
+            "distance": "<100m",
+            "deliveryFee": {
+              "baseFee": "1,49₾",
+              "effectiveFee": "1,49₾",
+              "icon": {
+                "lightImage": "dh:customer-assets-glovo/StoreWall/NewStoreWall/storeCard/deliveryLight.png",
+                "darkImage": "dh:customer-assets-glovo/StoreWall/NewStoreWall/storeCard/deliveryDark.png"
+              },
+              "isPrimeDeliveryFee": false,
+              "isFreeDeliveryFee": false,
+              "isDiscountedDeliveryFee": false,
+              "isSurged": false
+            },
+            "title": "Carrefour",
+            "availability": {
+              "status": "OPEN"
+            },
+            "slug": "1carrefour-tbi",
+            "isTopRated": false,
+            "isFavorite": false,
+            "isNew": false,
+            "inStorePrices": {
+              "hasInStorePrices": true,
+              "description": "In-store prices"
+            },
+            "sponsored": {
+              "isSponsored": false
+            },
+            "metadata": {
+              "promoIds": [
+                "-1",
+                "1952481708"
+              ],
+              "storeAddressId": 136826,
+              "shopRankPosition": 0,
+              "rankingType": "Hyperlocal",
+              "shopSponsoringPlacement": "shop_list:list",
+              "isSurgeActivated": false,
+              "deliveryFee": 1.49,
+              "deliveryFeeCurrency": "GEL"
+            }
+          },
+          {
+            "id": "37350",
+            "image": {
+              "lightImage": "dh:stores-glovo/stores/f7b663ad91b4afba424d454495afc233b4881c40024bf49a759a7cf6b7c47394",
+              "darkImage": "dh:stores-glovo/stores/f7b663ad91b4afba424d454495afc233b4881c40024bf49a759a7cf6b7c47394"
+            },
+            "logo": {
+              "lightImage": "dh:customer-assets-glovo/store_logos/13438764300f5f4405b6d969c3d1541bb48e467ea1aca9f8366e2a75eb81d486",
+              "darkImage": "dh:customer-assets-glovo/store_logos/13438764300f5f4405b6d969c3d1541bb48e467ea1aca9f8366e2a75eb81d486"
+            },
+            "promotions": [
+              {
+                "type": "FLAT_PRODUCT",
+                "benefit": "Promo on some items",
+                "description": "",
+                "isPrime": false
+              }
+            ],
+            "ratings": {
+              "score": "95%",
+              "votes": "(199)",
+              "icon": {
+                "lightImage": "dh:customer-assets-glovo/store_ratings/rating_good.png",
+                "darkImage": "dh:customer-assets-glovo/store_ratings/rating_good_dark_icon.png"
+              }
+            },
+            "tag": "Home",
+            "eta": "30-40 min",
+            "distance": "<100m",
+            "deliveryFee": {
+              "baseFee": "2,99₾",
+              "effectiveFee": "2,99₾",
+              "icon": {
+                "lightImage": "dh:customer-assets-glovo/StoreWall/NewStoreWall/storeCard/deliveryLight.png",
+                "darkImage": "dh:customer-assets-glovo/StoreWall/NewStoreWall/storeCard/deliveryDark.png"
+              },
+              "isPrimeDeliveryFee": false,
+              "isFreeDeliveryFee": false,
+              "isDiscountedDeliveryFee": false,
+              "isSurged": false
+            },
+            "title": "Nikora Supermarket",
+            "availability": {
+              "status": "OPEN"
+            },
+            "slug": "nikora-test-tbi",
+            "isTopRated": false,
+            "isFavorite": false,
+            "isNew": false,
+            "inStorePrices": {
+              "hasInStorePrices": true,
+              "description": "In-store prices"
+            },
+            "sponsored": {
+              "isSponsored": false
+            },
+            "metadata": {
+              "promoIds": [
+                "-1"
+              ],
+              "storeAddressId": 81515,
+              "shopRankPosition": 1,
+              "rankingType": "Hyperlocal",
+              "shopSponsoringPlacement": "shop_list:list",
+              "isSurgeActivated": false,
+              "deliveryFee": 2.99,
+              "deliveryFeeCurrency": "GEL"
+            }
+          },
+          {
+            "id": "169869",
+            "image": {
+              "lightImage": "dh:stores-glovo/stores/e50573f5fbfa309492c3fe8d34ca8bd73dd9d9bf3492ff8b21970b5ca3407ffe",
+              "darkImage": "dh:stores-glovo/stores/e50573f5fbfa309492c3fe8d34ca8bd73dd9d9bf3492ff8b21970b5ca3407ffe"
+            },
+            "logo": {
+              "lightImage": "dh:customer-assets-glovo/store_logos/8894acb7b2df58bb75320f111f72ffc8110d3d3cd940f5c740fc75c223a1fc3d",
+              "darkImage": "dh:customer-assets-glovo/store_logos/8894acb7b2df58bb75320f111f72ffc8110d3d3cd940f5c740fc75c223a1fc3d"
+            },
+            "promotions": [
+              {
+                "type": "FLAT_PRODUCT",
+                "benefit": "Promo on some items",
+                "description": "",
+                "isPrime": false
+              }
+            ],
+            "ratings": {
+              "score": "98%",
+              "votes": "(9k+)",
+              "icon": {
+                "lightImage": "dh:customer-assets-glovo/store_ratings/rating_excellent.png",
+                "darkImage": "dh:customer-assets-glovo/store_ratings/rating_excellent_dark_icon.png"
+              }
+            },
+            "tag": "Supermarket",
+            "eta": "30-40 min",
+            "distance": "<100m",
+            "deliveryFee": {
+              "baseFee": "4,49₾",
+              "effectiveFee": "4,49₾",
+              "icon": {
+                "lightImage": "dh:customer-assets-glovo/StoreWall/NewStoreWall/storeCard/deliveryLight.png",
+                "darkImage": "dh:customer-assets-glovo/StoreWall/NewStoreWall/storeCard/deliveryDark.png"
+              },
+              "isPrimeDeliveryFee": false,
+              "isFreeDeliveryFee": false,
+              "isDiscountedDeliveryFee": false,
+              "isSurged": false
+            },
+            "title": "Agrohub",
+            "availability": {
+              "status": "OPEN"
+            },
+            "slug": "agrohubtbi",
+            "isTopRated": false,
+            "isFavorite": false,
+            "isNew": false,
+            "inStorePrices": {
+              "hasInStorePrices": true,
+              "description": "In-store prices"
+            },
+            "sponsored": {
+              "isSponsored": false
+            },
+            "metadata": {
+              "promoIds": [
+                "-1"
+              ],
+              "storeAddressId": 702698,
+              "shopRankPosition": 2,
+              "rankingType": "Hyperlocal",
+              "shopSponsoringPlacement": "shop_list:list",
+              "isSurgeActivated": false,
+              "deliveryFee": 4.49,
+              "deliveryFeeCurrency": "GEL"
+            }
+          }
+        ],
+        "pagination": {
+          "limit": 50,
+          "moduleId": "StoreFeeds",
+          "offset": 0,
+          "totalEntries": 328
+        }
+      },
+      "widgets": []
+    }
+  }
+}
