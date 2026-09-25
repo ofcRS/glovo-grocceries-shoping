@@ -1,0 +1,35 @@
+{
+  "method": "POST",
+  "url": "https://api.glovoapp.com/oauth/refresh",
+  "endpoint": "/oauth/refresh",
+  "status": 200,
+  "contentType": "application/json",
+  "requestHeaders": {
+    "accept": "application/json, text/plain, */*",
+    "accept-language": "en",
+    "authorization": "[REDACTED]",
+    "content-length": "655",
+    "content-type": "application/json",
+    "glovo-api-version": "14",
+    "glovo-app-context": "web",
+    "glovo-app-development-state": "prod",
+    "glovo-app-platform": "web",
+    "glovo-app-type": "customer",
+    "glovo-device-urn": "[REDACTED]",
+    "glovo-dynamic-session-id": "[REDACTED]",
+    "glovo-language-code": "en",
+    "glovo-location-city-code": "TBI",
+    "glovo-location-country-code": "GE",
+    "origin": "https://glovoapp.com",
+    "referer": "https://glovoapp.com/"
+  },
+  "requestBody": {
+    "refreshToken": "[REDACTED]"
+  },
+  "responseBody": {
+    "accessToken": "[REDACTED]",
+    "expiresIn": 1198,
+    "refreshToken": "[REDACTED]",
+    "tokenType": "[REDACTED]"
+  }
+}

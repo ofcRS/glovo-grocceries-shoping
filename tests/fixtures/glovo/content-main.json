@@ -1,0 +1,349 @@
+{
+  "method": "GET",
+  "url": "https://api.glovoapp.com/v4/stores/169869/addresses/595140/content/main?nodeType=DEEP_LINK&link=nakini-sc.55183992%2Fnakinebi-c.51890818",
+  "endpoint": "/v4/stores/{id}/addresses/{id}/content/main",
+  "status": 200,
+  "contentType": "application/json",
+  "requestHeaders": {
+    "accept": "application/json, text/plain, */*",
+    "accept-language": "en",
+    "authorization": "[REDACTED]",
+    "glovo-api-version": "14",
+    "glovo-app-context": "web",
+    "glovo-app-development-state": "prod",
+    "glovo-app-platform": "web",
+    "glovo-app-type": "customer",
+    "glovo-device-urn": "[REDACTED]",
+    "glovo-dynamic-session-id": "[REDACTED]",
+    "glovo-language-code": "en",
+    "glovo-location-city-code": "TBI",
+    "glovo-location-country-code": "GE",
+    "origin": "https://glovoapp.com",
+    "referer": "https://glovoapp.com/"
+  },
+  "requestBody": null,
+  "responseBody": {
+    "type": "GRID_VIEW_LAYOUT",
+    "data": {
+      "title": "ნაყინები",
+      "activeElementSlug": "nakinebi-c.51890818",
+      "styles": {
+        "contentMode": "AUTO"
+      },
+      "body": [
+        {
+          "id": "agrohabis-nakini-s.51890403",
+          "type": "GRID",
+          "data": {
+            "title": "აგროჰაბის ნაყინი",
+            "slug": "agrohabis-nakini-s.51890403",
+            "elements": [
+              {
+                "type": "PRODUCT_TILE",
+                "data": {
+                  "id": 4611686018469305000,
+                  "externalId": "AGH4860450208694",
+                  "storeProductId": "AGH4860450208694",
+                  "urn": "",
+                  "name": "ნაყინი ვანილის ნედლი რძის/აგროჰაბი/ 60გ",
+                  "imageSize": "MEDIUM_FILL_WIDTH",
+                  "price": 1.4,
+                  "priceInfo": {
+                    "amount": 1.4,
+                    "currencyCode": "GEL",
+                    "displayText": "1,40₾"
+                  },
+                  "imageUrl": "https://glovo.dhmedia.io/image/pim-glovo/64ba6884d6b7b0e01cff0260.jpeg",
+                  "imageId": "dh:pim-glovo/64ba6884d6b7b0e01cff0260.jpeg",
+                  "images": [],
+                  "tags": [],
+                  "attributeGroups": [],
+                  "promotions": [],
+                  "labels": [],
+                  "indicators": [],
+                  "sponsored": false,
+                  "restricted": false,
+                  "tracking": {
+                    "increment": 1,
+                    "productSaleType": "piece_piece",
+                    "isWeightedProduct": false,
+                    "subCategory": "აგროჰაბის ნაყინი",
+                    "subCategoryId": "09118bf8-40a3-467d-8dd3-ba9bd2ba13ce",
+                    "categoryId": "9745d8c5-af3d-4e55-a46e-da48c27a0b00",
+                    "qcQueryId": "843299628",
+                    "dietaryLabels": [],
+                    "dietaryLabelsAvailable": false
+                  },
+                  "showQuantifiers": true,
+                  "outOfStock": false
+                },
+                "actions": [
+                  {
+                    "trigger": "onImpression",
+                    "data": {
+                      "events": [
+                        {
+                          "name": "product_impressions.loaded",
+                          "data": {
+                            "_eventVersion": "101",
+                            "screenType": "category_details",
+                            "screenName": "category_details_screen",
+                            "productSKU": "4611686018469305433",
+                            "productIndex": "0",
+                            "categoryId": "9745d8c5-af3d-4e55-a46e-da48c27a0b00",
+                            "eventOrigin": "category_details",
+                            "shopId": "595140",
+                            "subCategoryId": "09118bf8-40a3-467d-8dd3-ba9bd2ba13ce",
+                            "subCategoryName": "ნაყინები",
+                            "swimlaneRequestId": "51890403",
+                            "swimlaneTitle": "აგროჰაბის ნაყინი",
+                            "collectionGroupId": "55183992",
+                            "collectionId": "51890818",
+                            "collectionSectionId": "51890403",
+                            "collectionType": "Catalogue",
+                            "isSponsored": "false",
+                            "productExternalId": "AGH4860450208694",
+                            "productSaleType": "PiecePiece",
+                            "storeProductId": "AGH4860450208694",
+                            "qcQueryId": "843299628",
+                            "eans": "04860450208694",
+                            "dietaryLabels": "",
+                            "dietaryLabelsAvailable": "false",
+                            "isOrderedBefore": "false",
+                            "isOutOfStock": "false",
+                            "isOrderBeforeinCurrentStore": "false",
+                            "isOrderedBeforeInAnyStore": "false"
+                          },
+                          "placeholders": []
+                        }
+                      ],
+                      "actionType": "EVENT"
+                    },
+                    "type": "PERSEUS_EVENT"
+                  }
+                ]
+              },
+              {
+                "type": "PRODUCT_TILE",
+                "data": {
+                  "id": 4611686018469305000,
+                  "externalId": "AGH4860450208700",
+                  "storeProductId": "AGH4860450208700",
+                  "urn": "",
+                  "name": "შოკოლადის ნაყინი ნედლი რძის/აგროჰაბი/ 60გ",
+                  "imageSize": "MEDIUM_FILL_WIDTH",
+                  "price": 1.4,
+                  "priceInfo": {
+                    "amount": 1.4,
+                    "currencyCode": "GEL",
+                    "displayText": "1,40₾"
+                  },
+                  "imageUrl": "https://glovo.dhmedia.io/image/global-catalog-glovo/nv-global-catalog/ac/86e19a8d-d7bc-4bd0-8a45-f3a78ccda601.jpg",
+                  "imageId": "dh:global-catalog-glovo/nv-global-catalog/ac/86e19a8d-d7bc-4bd0-8a45-f3a78ccda601.jpg",
+                  "images": [],
+                  "tags": [],
+                  "attributeGroups": [],
+                  "promotions": [],
+                  "labels": [],
+                  "indicators": [],
+                  "sponsored": false,
+                  "restricted": false,
+                  "tracking": {
+                    "increment": 1,
+                    "productSaleType": "piece_piece",
+                    "isWeightedProduct": false,
+                    "subCategory": "აგროჰაბის ნაყინი",
+                    "subCategoryId": "09118bf8-40a3-467d-8dd3-ba9bd2ba13ce",
+                    "categoryId": "9745d8c5-af3d-4e55-a46e-da48c27a0b00",
+                    "qcQueryId": "843299628",
+                    "dietaryLabels": [],
+                    "dietaryLabelsAvailable": false
+                  },
+                  "showQuantifiers": true,
+                  "outOfStock": false
+                },
+                "actions": [
+                  {
+                    "trigger": "onImpression",
+                    "data": {
+                      "events": [
+                        {
+                          "name": "product_impressions.loaded",
+                          "data": {
+                            "_eventVersion": "101",
+                            "screenType": "category_details",
+                            "screenName": "category_details_screen",
+                            "productSKU": "4611686018469305434",
+                            "productIndex": "1",
+                            "categoryId": "9745d8c5-af3d-4e55-a46e-da48c27a0b00",
+                            "eventOrigin": "category_details",
+                            "shopId": "595140",
+                            "subCategoryId": "09118bf8-40a3-467d-8dd3-ba9bd2ba13ce",
+                            "subCategoryName": "ნაყინები",
+                            "swimlaneRequestId": "51890403",
+                            "swimlaneTitle": "აგროჰაბის ნაყინი",
+                            "collectionGroupId": "55183992",
+                            "collectionId": "51890818",
+                            "collectionSectionId": "51890403",
+                            "collectionType": "Catalogue",
+                            "isSponsored": "false",
+                            "productExternalId": "AGH4860450208700",
+                            "productSaleType": "PiecePiece",
+                            "storeProductId": "AGH4860450208700",
+                            "qcQueryId": "843299628",
+                            "eans": "04860450208700",
+                            "dietaryLabels": "",
+                            "dietaryLabelsAvailable": "false",
+                            "isOrderedBefore": "false",
+                            "isOutOfStock": "false",
+                            "isOrderBeforeinCurrentStore": "false",
+                            "isOrderedBeforeInAnyStore": "false"
+                          },
+                          "placeholders": []
+                        }
+                      ],
+                      "actionType": "EVENT"
+                    },
+                    "type": "PERSEUS_EVENT"
+                  }
+                ]
+              },
+              {
+                "type": "PRODUCT_TILE",
+                "data": {
+                  "id": 4611686018469305000,
+                  "externalId": "AGH4860108250341",
+                  "storeProductId": "AGH4860108250341",
+                  "urn": "",
+                  "name": "ნაყინი ვანილის ნედლი რძის  /აგროჰაბი/ 1 კგ",
+                  "imageSize": "MEDIUM_FILL_WIDTH",
+                  "price": 11,
+                  "priceInfo": {
+                    "amount": 11,
+                    "currencyCode": "GEL",
+                    "displayText": "11,00₾"
+                  },
+                  "imageUrl": "https://glovo.dhmedia.io/image/global-catalog-glovo/nv-global-catalog/ac/c25fb498-5797-4f41-a0e7-bd558692cac1.jpg",
+                  "imageId": "dh:global-catalog-glovo/nv-global-catalog/ac/c25fb498-5797-4f41-a0e7-bd558692cac1.jpg",
+                  "images": [],
+                  "tags": [],
+                  "attributeGroups": [],
+                  "promotions": [],
+                  "labels": [],
+                  "indicators": [],
+                  "sponsored": false,
+                  "restricted": false,
+                  "tracking": {
+                    "increment": 1,
+                    "productSaleType": "piece_piece",
+                    "isWeightedProduct": false,
+                    "subCategory": "აგროჰაბის ნაყინი",
+                    "subCategoryId": "09118bf8-40a3-467d-8dd3-ba9bd2ba13ce",
+                    "categoryId": "9745d8c5-af3d-4e55-a46e-da48c27a0b00",
+                    "qcQueryId": "843299628",
+                    "dietaryLabels": [],
+                    "dietaryLabelsAvailable": false
+                  },
+                  "showQuantifiers": true,
+                  "outOfStock": false
+                },
+                "actions": [
+                  {
+                    "trigger": "onImpression",
+                    "data": {
+                      "events": [
+                        {
+                          "name": "product_impressions.loaded",
+                          "data": {
+                            "_eventVersion": "101",
+                            "screenType": "category_details",
+                            "screenName": "category_details_screen",
+                            "productSKU": "4611686018469305437",
+                            "productIndex": "2",
+                            "categoryId": "9745d8c5-af3d-4e55-a46e-da48c27a0b00",
+                            "eventOrigin": "category_details",
+                            "shopId": "595140",
+                            "subCategoryId": "09118bf8-40a3-467d-8dd3-ba9bd2ba13ce",
+                            "subCategoryName": "ნაყინები",
+                            "swimlaneRequestId": "51890403",
+                            "swimlaneTitle": "აგროჰაბის ნაყინი",
+                            "collectionGroupId": "55183992",
+                            "collectionId": "51890818",
+                            "collectionSectionId": "51890403",
+                            "collectionType": "Catalogue",
+                            "isSponsored": "false",
+                            "productExternalId": "AGH4860108250341",
+                            "productSaleType": "PiecePiece",
+                            "storeProductId": "AGH4860108250341",
+                            "qcQueryId": "843299628",
+                            "eans": "04860108250341",
+                            "dietaryLabels": "",
+                            "dietaryLabelsAvailable": "false",
+                            "isOrderedBefore": "false",
+                            "isOutOfStock": "false",
+                            "isOrderBeforeinCurrentStore": "false",
+                            "isOrderedBeforeInAnyStore": "false"
+                          },
+                          "placeholders": []
+                        }
+                      ],
+                      "actionType": "EVENT"
+                    },
+                    "type": "PERSEUS_EVENT"
+                  }
+                ]
+              }
+            ],
+            "tracking": {
+              "collectionSectionId": 51890403
+            },
+            "columns": 2
+          }
+        },
+        {
+          "id": "cp-s-59619552",
+          "type": "CONTENT_PLACEHOLDER",
+          "data": {
+            "contentUri": "/v4/stores/169869/addresses/595140/content/partial?component=section&id=59619552",
+            "title": "Ben&Jerry",
+            "slug": "ben-jerry-s.59619552",
+            "variation": "GRID"
+          },
+          "actions": []
+        },
+        {
+          "id": "cp-s-51890632",
+          "type": "CONTENT_PLACEHOLDER",
+          "data": {
+            "contentUri": "/v4/stores/169869/addresses/595140/content/partial?component=section&id=51890632",
+            "title": "ნაყინი საცალო",
+            "slug": "nakini-satsalo-s.51890632",
+            "variation": "GRID"
+          },
+          "actions": []
+        }
+      ],
+      "tracking": {
+        "storeAddressId": 595140,
+        "storeId": 169869,
+        "collectionId": 51890818,
+        "collectionSectionsIds": [
+          51890629,
+          51890403,
+          51890655
+        ],
+        "collectionGroupId": 55183992,
+        "perseusCollectionType": "Catalogue",
+        "layoutDisplayed": "Products",
+        "rootContent": "Products",
+        "layoutDesign": "GRID_VIEW",
+        "hasReturnPolicy": false,
+        "hasReturnPolicyLink": false,
+        "productCount": 6,
+        "storeVertical": "Q_COMMERCE",
+        "categoryId": "9745d8c5-af3d-4e55-a46e-da48c27a0b00"
+      },
+      "otcLabelsNavigationLinks": {}
+    }
+  }
+}

@@ -1,0 +1,147 @@
+{
+  "method": "GET",
+  "url": "https://api.glovoapp.com/v1/authenticated/customers/123456/baskets/stores/169869",
+  "endpoint": "/v1/authenticated/customers/{id}/baskets/stores/{id}",
+  "status": 200,
+  "contentType": "application/json",
+  "requestHeaders": {
+    "accept": "application/json, text/plain, */*",
+    "accept-language": "en",
+    "authorization": "[REDACTED]",
+    "glovo-api-version": "14",
+    "glovo-app-context": "web",
+    "glovo-app-development-state": "prod",
+    "glovo-app-platform": "web",
+    "glovo-app-type": "customer",
+    "glovo-device-urn": "[REDACTED]",
+    "glovo-dynamic-session-id": "[REDACTED]",
+    "glovo-language-code": "en",
+    "glovo-location-city-code": "TBI",
+    "glovo-location-country-code": "GE",
+    "origin": "https://glovoapp.com",
+    "referer": "https://glovoapp.com/"
+  },
+  "requestBody": null,
+  "responseBody": {
+    "basketId": "123456_169869_78192151-bd54-4bc4-8077-9bad3b9faf6e",
+    "basketVersion": "025bdb0a-612c-4b81-b590-090df2fc343e",
+    "handlingStrategy": "DELIVERY",
+    "customerId": 123456,
+    "storeId": 169869,
+    "storeAddressId": 595140,
+    "storeCategoryId": 4,
+    "products": [
+      {
+        "ids": {
+          "basketProductId": "SP_AGH8076809502443_a3fcd703-407c-3948-a693-79c3d4db3db5",
+          "legacyId": 4611686018469291000,
+          "id": "4611686018469291378",
+          "externalId": "AGH8076809502443",
+          "storeProductId": "AGH8076809502443"
+        },
+        "quantity": {
+          "increments": 1,
+          "incrementsLimit": 250,
+          "items": 1,
+          "itemsLimit": 250,
+          "limitType": "CART_BE_LIMIT"
+        },
+        "type": "PRODUCT",
+        "comboProducts": [],
+        "price": {
+          "totalFormatted": "14,95₾",
+          "unitaryBasePrice": {
+            "minor": 1495,
+            "major": 14.95,
+            "formatted": "14,95₾"
+          },
+          "unitaryTotalPrice": {
+            "minor": 1495,
+            "major": 14.95,
+            "formatted": "14,95₾"
+          },
+          "productTotalDiscount": null,
+          "originalProductTotalDiscount": null,
+          "productTotalTeasingDiscount": null,
+          "originalUnitaryBasePrice": null,
+          "originalUnitaryTotalPrice": null,
+          "final": {
+            "minor": null,
+            "major": 14.95,
+            "formatted": "14,95₾"
+          }
+        },
+        "name": "ჩხირები პურის  / Mulino Bianco / 300 გ",
+        "productName": "ჩხირები პურის  / Mulino Bianco / 300 გ",
+        "description": "",
+        "imageUrl": "https://glovo.dhmedia.io/image/global-catalog-glovo/nv-global-catalog/ac/a195ed94-4ba1-41c2-b4c6-5c5151897d26.jpg",
+        "imageServiceId": "dh:global-catalog-glovo/nv-global-catalog/ac/a195ed94-4ba1-41c2-b4c6-5c5151897d26.jpg",
+        "isCustomizable": false,
+        "customizations": [],
+        "discounts": [],
+        "teasingDiscounts": [],
+        "productReplacement": null,
+        "weighableInfo": null,
+        "weight": {
+          "value": 290,
+          "unit": "g"
+        },
+        "restrictions": [],
+        "packaging": null,
+        "nmrAdId": null,
+        "eans": [
+          "08076809502443"
+        ],
+        "tags": [],
+        "availability": "AVAILABLE",
+        "isEnergyDrink": false
+      }
+    ],
+    "productSuggestions": [],
+    "basketPrice": {
+      "total": {
+        "minor": 1495,
+        "major": 14.95,
+        "formatted": "14,95₾"
+      },
+      "totalFormatted": "14,95₾",
+      "final": {
+        "minor": 1495,
+        "major": 14.95,
+        "formatted": "14,95₾"
+      }
+    },
+    "basketPriceBeforeLastRequest": {
+      "total": {
+        "minor": 1495,
+        "major": 14.95,
+        "formatted": "14,95₾"
+      },
+      "totalFormatted": "14,95₾",
+      "final": {
+        "minor": 1495,
+        "major": 14.95,
+        "formatted": "14,95₾"
+      }
+    },
+    "basketWeightGrams": 290,
+    "mbs": null,
+    "isPrimeSubscriptionSimulated": null,
+    "basketCreationWidgetId": null,
+    "cityCode": "TBI",
+    "usingDhBasket": true,
+    "status": "IN_PROGRESS",
+    "currencyCode": "GEL",
+    "countryCode": "GE",
+    "catalogLanguageCode": "ka",
+    "baseOrderUrn": null,
+    "updatedAt": "2026-09-25T15:04:59Z",
+    "createdAt": "2026-09-25T15:04:49.926Z",
+    "expiresAt": "2026-09-25T17:04:59Z",
+    "storeInfo": {
+      "vertical": null,
+      "logo": "dh:customer-assets-glovo/store_logos/8894acb7b2df58bb75320f111f72ffc8110d3d3cd940f5c740fc75c223a1fc3d",
+      "name": "Agrohub"
+    }
+  }
+}

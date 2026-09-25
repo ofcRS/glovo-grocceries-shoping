@@ -58,7 +58,8 @@ const PRIMITIVE_ONLY_KEYS = new Set(["text", "details"]);
  * Address-like keys (`address…`, `…address`, `location`) open an address subtree: every string and number leaf below
  * is replaced except those under these keys, so `deliveryAddress.line1` goes and `deliveryAddress.cityCode` stays.
  */
-const ADDRESS_KEEP_KEYS = new Set(["citycode", "countrycode", "cityname", "city", "country", "type", "label", "id"]);
+// `label` is deliberately absent: in Glovo payloads `address.label` and `deliveryAddress.label` hold the street and number.
+const ADDRESS_KEEP_KEYS = new Set(["citycode", "countrycode", "cityname", "city", "country", "type", "id"]);
 /** City and country codes are never personal; this also keeps the `glovo-location-city-code` header. */
 const isGeoCode = (k: string): boolean => k.endsWith("citycode") || k.endsWith("countrycode");
 const isAddressKey = (k: string): boolean => k === "location" || k.startsWith("address") || k.endsWith("address");

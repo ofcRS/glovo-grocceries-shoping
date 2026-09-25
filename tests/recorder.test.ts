@@ -226,7 +226,7 @@ test("redactBody replaces any other non-JSON body and passes empty bodies throug
   expect(redactBody("", "application/json")).toBeNull();
 });
 
-test("address-like objects redact every string and number leaf except city, country, type, label and id", () => {
+test("address-like objects redact every string and number leaf except city, country, type and id", () => {
   const out = redact({
     deliveryAddress: {
       id: 9, cityCode: "TBI", countryCode: "GE", cityName: "Tbilisi", city: "Tbilisi", country: "Georgia", type: "HOME", label: "Home",
@@ -241,7 +241,7 @@ test("address-like objects redact every string and number leaf except city, coun
   });
   expect(out).toEqual({
     deliveryAddress: {
-      id: 9, cityCode: "TBI", countryCode: "GE", cityName: "Tbilisi", city: "Tbilisi", country: "Georgia", type: "HOME", label: "Home",
+      id: 9, cityCode: "TBI", countryCode: "GE", cityName: "Tbilisi", city: "Tbilisi", country: "Georgia", type: "HOME", label: "[REDACTED]",
       line1: "[REDACTED]", line2: "[REDACTED]", entrance: "[REDACTED]", floor: "[REDACTED]", doorCode: "[REDACTED]", coordinates: "[REDACTED]",
       components: [{ name: "[REDACTED]", kind: "[REDACTED]" }], isDefault: true,
     },
@@ -284,4 +284,18 @@ test("redactHeaders drops HTTP/2 pseudo-headers and redacts the query string of 
   expect(out.referer).not.toContain("a%40b.c");
   expect(out.referer).toContain("page=2");
   expect(out.origin).toBe("https://glovoapp.com");
+});
+
+test("redact hides address labels: Glovo puts the street and number in address.label and deliveryAddress.label", () => {
+  const out = redact({
+    points: [{ type: "DELIVERY", address: { label: "Some Street 9, 3, 12", cityCode: "TBI", id: 1 } }],
+    components: { deliveryAddress: { label: "Some Street 9", details: "door 1234", cityCode: "TBI" } },
+    store: { label: "Agrohub Vake", storeAddressId: 595140 },
+  });
+  expect(out.points[0]!.address.label).toBe("[REDACTED]");
+  expect(out.points[0]!.address.cityCode).toBe("TBI");
+  expect(out.points[0]!.address.id).toBe(1);
+  expect(out.components.deliveryAddress.label).toBe("[REDACTED]");
+  expect(out.store.label).toBe("Agrohub Vake");
+  expect(out.store.storeAddressId).toBe(595140);
 });

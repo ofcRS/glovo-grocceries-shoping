@@ -1,0 +1,302 @@
+{
+  "method": "GET",
+  "url": "https://api.glovoapp.com/v4/stores/169869/addresses/595140/content/partial?component=section&id=59619552",
+  "endpoint": "/v4/stores/{id}/addresses/{id}/content/partial",
+  "status": 200,
+  "contentType": "application/json",
+  "requestHeaders": {
+    "accept": "application/json, text/plain, */*",
+    "accept-language": "en",
+    "authorization": "[REDACTED]",
+    "glovo-api-version": "14",
+    "glovo-app-context": "web",
+    "glovo-app-development-state": "prod",
+    "glovo-app-platform": "web",
+    "glovo-app-type": "customer",
+    "glovo-device-urn": "[REDACTED]",
+    "glovo-dynamic-session-id": "[REDACTED]",
+    "glovo-language-code": "en",
+    "glovo-location-city-code": "TBI",
+    "glovo-location-country-code": "GE",
+    "origin": "https://glovoapp.com",
+    "referer": "https://glovoapp.com/"
+  },
+  "requestBody": null,
+  "responseBody": {
+    "type": "GRID_VIEW_LAYOUT",
+    "data": {
+      "title": "Ben&Jerry",
+      "body": [
+        {
+          "id": "ben-jerry-s.59619552",
+          "type": "GRID",
+          "data": {
+            "title": "Ben&Jerry",
+            "slug": "ben-jerry-s.59619552",
+            "elements": [
+              {
+                "type": "PRODUCT_TILE",
+                "data": {
+                  "id": 4611686018610973000,
+                  "externalId": "AGH8711327371002",
+                  "storeProductId": "AGH8711327371002",
+                  "urn": "",
+                  "name": "ნაყინი ნახევრად გამომცხვარი ორცხობილით /Ben&Jerry/465 გ",
+                  "imageSize": "MEDIUM_FILL_WIDTH",
+                  "price": 33.9,
+                  "priceInfo": {
+                    "amount": 33.9,
+                    "currencyCode": "GEL",
+                    "displayText": "33,90₾"
+                  },
+                  "imageUrl": "https://glovo.dhmedia.io/image/global-catalog-glovo/nv-global-catalog/ac/39f17377-784f-4c6b-97ad-6482cf104449.jpg",
+                  "imageId": "dh:global-catalog-glovo/nv-global-catalog/ac/39f17377-784f-4c6b-97ad-6482cf104449.jpg",
+                  "images": [],
+                  "tags": [],
+                  "attributeGroups": [],
+                  "promotions": [],
+                  "labels": [],
+                  "indicators": [],
+                  "sponsored": false,
+                  "restricted": false,
+                  "tracking": {
+                    "increment": 1,
+                    "productSaleType": "piece_piece",
+                    "isWeightedProduct": false,
+                    "subCategory": "Ben&Jerry",
+                    "subCategoryId": "689e078b-a051-43f1-8b75-0dd48d2a3ca1",
+                    "categoryId": "9745d8c5-af3d-4e55-a46e-da48c27a0b00",
+                    "qcQueryId": "903682890",
+                    "dietaryLabels": [],
+                    "dietaryLabelsAvailable": false
+                  },
+                  "showQuantifiers": true,
+                  "outOfStock": false
+                },
+                "actions": [
+                  {
+                    "trigger": "onImpression",
+                    "data": {
+                      "events": [
+                        {
+                          "name": "product_impressions.loaded",
+                          "data": {
+                            "_eventVersion": "101",
+                            "screenType": "category_details",
+                            "screenName": "category_details_screen",
+                            "productSKU": "4611686018610973032",
+                            "productIndex": "0",
+                            "categoryId": "9745d8c5-af3d-4e55-a46e-da48c27a0b00",
+                            "eventOrigin": "category_details",
+                            "shopId": "595140",
+                            "subCategoryId": "689e078b-a051-43f1-8b75-0dd48d2a3ca1",
+                            "subCategoryName": "ნაყინები",
+                            "swimlaneRequestId": "59619552",
+                            "swimlaneTitle": "Ben&Jerry",
+                            "collectionGroupId": "55183992",
+                            "collectionId": "51890818",
+                            "collectionSectionId": "59619552",
+                            "collectionType": "Catalogue",
+                            "isSponsored": "false",
+                            "productExternalId": "AGH8711327371002",
+                            "productSaleType": "PiecePiece",
+                            "storeProductId": "AGH8711327371002",
+                            "qcQueryId": "903682890",
+                            "eans": "08711327371002",
+                            "dietaryLabels": "",
+                            "dietaryLabelsAvailable": "false",
+                            "isOrderedBefore": "false",
+                            "isOutOfStock": "false",
+                            "isOrderBeforeinCurrentStore": "false",
+                            "isOrderedBeforeInAnyStore": "false"
+                          },
+                          "placeholders": []
+                        }
+                      ],
+                      "actionType": "EVENT"
+                    },
+                    "type": "PERSEUS_EVENT"
+                  }
+                ]
+              },
+              {
+                "type": "PRODUCT_TILE",
+                "data": {
+                  "id": 4611686018610973000,
+                  "externalId": "AGH8711327373105",
+                  "storeProductId": "AGH8711327373105",
+                  "urn": "",
+                  "name": "ნაყინი ორცხობილით /Ben&Jerry/465 გ",
+                  "imageSize": "MEDIUM_FILL_WIDTH",
+                  "price": 33.9,
+                  "priceInfo": {
+                    "amount": 33.9,
+                    "currencyCode": "GEL",
+                    "displayText": "33,90₾"
+                  },
+                  "imageUrl": "https://glovo.dhmedia.io/image/global-catalog-glovo/nv-global-catalog/ac/4598d8a2-abfb-4044-932d-3735f1ac325a.jpg",
+                  "imageId": "dh:global-catalog-glovo/nv-global-catalog/ac/4598d8a2-abfb-4044-932d-3735f1ac325a.jpg",
+                  "images": [],
+                  "tags": [],
+                  "attributeGroups": [],
+                  "promotions": [],
+                  "labels": [],
+                  "indicators": [],
+                  "sponsored": false,
+                  "restricted": false,
+                  "tracking": {
+                    "increment": 1,
+                    "productSaleType": "piece_piece",
+                    "isWeightedProduct": false,
+                    "subCategory": "Ben&Jerry",
+                    "subCategoryId": "689e078b-a051-43f1-8b75-0dd48d2a3ca1",
+                    "categoryId": "9745d8c5-af3d-4e55-a46e-da48c27a0b00",
+                    "qcQueryId": "903682890",
+                    "dietaryLabels": [],
+                    "dietaryLabelsAvailable": false
+                  },
+                  "showQuantifiers": true,
+                  "outOfStock": false
+                },
+                "actions": [
+                  {
+                    "trigger": "onImpression",
+                    "data": {
+                      "events": [
+                        {
+                          "name": "product_impressions.loaded",
+                          "data": {
+                            "_eventVersion": "101",
+                            "screenType": "category_details",
+                            "screenName": "category_details_screen",
+                            "productSKU": "4611686018610973048",
+                            "productIndex": "1",
+                            "categoryId": "9745d8c5-af3d-4e55-a46e-da48c27a0b00",
+                            "eventOrigin": "category_details",
+                            "shopId": "595140",
+                            "subCategoryId": "689e078b-a051-43f1-8b75-0dd48d2a3ca1",
+                            "subCategoryName": "ნაყინები",
+                            "swimlaneRequestId": "59619552",
+                            "swimlaneTitle": "Ben&Jerry",
+                            "collectionGroupId": "55183992",
+                            "collectionId": "51890818",
+                            "collectionSectionId": "59619552",
+                            "collectionType": "Catalogue",
+                            "isSponsored": "false",
+                            "productExternalId": "AGH8711327373105",
+                            "productSaleType": "PiecePiece",
+                            "storeProductId": "AGH8711327373105",
+                            "qcQueryId": "903682890",
+                            "eans": "08711327373105",
+                            "dietaryLabels": "",
+                            "dietaryLabelsAvailable": "false",
+                            "isOrderedBefore": "false",
+                            "isOutOfStock": "false",
+                            "isOrderBeforeinCurrentStore": "false",
+                            "isOrderedBeforeInAnyStore": "false"
+                          },
+                          "placeholders": []
+                        }
+                      ],
+                      "actionType": "EVENT"
+                    },
+                    "type": "PERSEUS_EVENT"
+                  }
+                ]
+              },
+              {
+                "type": "PRODUCT_TILE",
+                "data": {
+                  "id": 4611686018610973000,
+                  "externalId": "AGH8711327371682",
+                  "storeProductId": "AGH8711327371682",
+                  "urn": "",
+                  "name": "ნაყინი ორცხობილების ნაზავით  /Ben&Jerry/465 გ",
+                  "imageSize": "MEDIUM_FILL_WIDTH",
+                  "price": 33.9,
+                  "priceInfo": {
+                    "amount": 33.9,
+                    "currencyCode": "GEL",
+                    "displayText": "33,90₾"
+                  },
+                  "imageUrl": "https://glovo.dhmedia.io/image/global-catalog-glovo/nv-global-catalog/ac/1f5deb9b-7b42-4f14-9070-d6030e4bb4d8.jpg",
+                  "imageId": "dh:global-catalog-glovo/nv-global-catalog/ac/1f5deb9b-7b42-4f14-9070-d6030e4bb4d8.jpg",
+                  "images": [],
+                  "tags": [],
+                  "attributeGroups": [],
+                  "promotions": [],
+                  "labels": [],
+                  "indicators": [],
+                  "sponsored": false,
+                  "restricted": false,
+                  "tracking": {
+                    "increment": 1,
+                    "productSaleType": "piece_piece",
+                    "isWeightedProduct": false,
+                    "subCategory": "Ben&Jerry",
+                    "subCategoryId": "689e078b-a051-43f1-8b75-0dd48d2a3ca1",
+                    "categoryId": "9745d8c5-af3d-4e55-a46e-da48c27a0b00",
+                    "qcQueryId": "903682890",
+                    "dietaryLabels": [],
+                    "dietaryLabelsAvailable": false
+                  },
+                  "showQuantifiers": true,
+                  "outOfStock": false
+                },
+                "actions": [
+                  {
+                    "trigger": "onImpression",
+                    "data": {
+                      "events": [
+                        {
+                          "name": "product_impressions.loaded",
+                          "data": {
+                            "_eventVersion": "101",
+                            "screenType": "category_details",
+                            "screenName": "category_details_screen",
+                            "productSKU": "4611686018610972985",
+                            "productIndex": "2",
+                            "categoryId": "9745d8c5-af3d-4e55-a46e-da48c27a0b00",
+                            "eventOrigin": "category_details",
+                            "shopId": "595140",
+                            "subCategoryId": "689e078b-a051-43f1-8b75-0dd48d2a3ca1",
+                            "subCategoryName": "ნაყინები",
+                            "swimlaneRequestId": "59619552",
+                            "swimlaneTitle": "Ben&Jerry",
+                            "collectionGroupId": "55183992",
+                            "collectionId": "51890818",
+                            "collectionSectionId": "59619552",
+                            "collectionType": "Catalogue",
+                            "isSponsored": "false",
+                            "productExternalId": "AGH8711327371682",
+                            "productSaleType": "PiecePiece",
+                            "storeProductId": "AGH8711327371682",
+                            "qcQueryId": "903682890",
+                            "eans": "08711327371682",
+                            "dietaryLabels": "",
+                            "dietaryLabelsAvailable": "false",
+                            "isOrderedBefore": "false",
+                            "isOutOfStock": "false",
+                            "isOrderBeforeinCurrentStore": "false",
+                            "isOrderedBeforeInAnyStore": "false"
+                          },
+                          "placeholders": []
+                        }
+                      ],
+                      "actionType": "EVENT"
+                    },
+                    "type": "PERSEUS_EVENT"
+                  }
+                ]
+              }
+            ],
+            "tracking": {
+              "collectionSectionId": 59619552
+            },
+            "columns": 2
+          }
+        }
+      ]
+    }
+  }
+}

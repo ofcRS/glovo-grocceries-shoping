@@ -1,0 +1,113 @@
+{
+  "method": "GET",
+  "url": "https://api.glovoapp.com/v4/payment_methods?storeAddressId=595140&clientSupports=GooglePay&clientReady=GooglePay&context=checkout",
+  "endpoint": "/v4/payment_methods",
+  "status": 200,
+  "contentType": "application/json",
+  "requestHeaders": {
+    "accept": "application/json, text/plain, */*",
+    "accept-language": "en",
+    "authorization": "[REDACTED]",
+    "glovo-api-version": "14",
+    "glovo-app-context": "web",
+    "glovo-app-development-state": "prod",
+    "glovo-app-platform": "web",
+    "glovo-app-type": "customer",
+    "glovo-device-urn": "[REDACTED]",
+    "glovo-dynamic-session-id": "[REDACTED]",
+    "glovo-language-code": "en",
+    "glovo-location-city-code": "TBI",
+    "glovo-location-country-code": "GE",
+    "origin": "https://glovoapp.com",
+    "referer": "https://glovoapp.com/"
+  },
+  "requestBody": null,
+  "responseBody": {
+    "data": {
+      "paymentMethods": [
+        {
+          "paymentInstrumentId": "pay_instrument:1c7bb57f-8339-43ee-b1cb-f2c8304ba41f",
+          "type": "CREDIT_CARD",
+          "name": "CREDIT_CARD",
+          "displayAttributes": {
+            "displayName": "SOLO",
+            "description": "Card ending in 0000 · 08/30",
+            "icon": {
+              "lightImageId": "dh:/customer-assets-glovo/payments/payment_methods/card-mastercard-light.svg",
+              "darkImageId": "dh:/customer-assets-glovo/payments/payment_methods/card-mastercard-dark.svg"
+            },
+            "tags": [],
+            "message": null
+          },
+          "metadata": {
+            "id": null,
+            "lastFourDigits": "[REDACTED]"
+          },
+          "selected": true
+        },
+        {
+          "paymentInstrumentId": "pay_instrument:cbdeee95-75fe-4908-8546-1d2550cb91af",
+          "type": "CREDIT_CARD",
+          "name": "CREDIT_CARD",
+          "displayAttributes": {
+            "displayName": "BOG (no business)",
+            "description": "Card ending in 0893 · 10/27",
+            "icon": {
+              "lightImageId": "dh:/customer-assets-glovo/payments/payment_methods/card-visa-light.svg",
+              "darkImageId": "dh:/customer-assets-glovo/payments/payment_methods/card-visa-dark.svg"
+            },
+            "tags": [],
+            "message": null
+          },
+          "metadata": {
+            "id": null,
+            "lastFourDigits": "[REDACTED]"
+          },
+          "selected": false
+        },
+        {
+          "paymentInstrumentId": "pay_instrument:16a89b2d-1132-42db-8449-1396a87be6f8",
+          "type": "ALTERNATIVE",
+          "name": "GOOGLE_PAY",
+          "displayAttributes": {
+            "displayName": "Google Pay",
+            "description": null,
+            "icon": {
+              "lightImageId": "dh:customer-assets-glovo/payments/payment_methods/google-pay-light.svg",
+              "darkImageId": "dh:customer-assets-glovo/payments/payment_methods/google-pay-dark.svg"
+            },
+            "tags": [],
+            "message": null
+          },
+          "metadata": {
+            "apmUser": "**** **** **** 0804",
+            "platform": "GooglePay"
+          },
+          "selected": false
+        }
+      ],
+      "actions": [
+        {
+          "type": "ADD_CARD",
+          "paymentMethod": "CREDIT_CARD",
+          "provider": "DH",
+          "displayAttributes": {
+            "displayName": "Add new card",
+            "description": null,
+            "icon": {
+              "lightImageId": "dh:/customer-assets-glovo/payments/payment_methods/add-card-light.svg",
+              "darkImageId": "dh:/customer-assets-glovo/payments/payment_methods/add-card-dark.svg"
+            },
+            "tags": [],
+            "message": null
+          },
+          "metadata": {
+            "hostedPaymentPageUrl": "https://api.glovoapp.com/v4/payment_instruments/hosted_payment_page?countryCode=GE&languageCode=en&appPlatform=WEB&paymentMethodId=CREDIT_CARD&context=CHECKOUT&currency&appVersion=v1.2726.1",
+            "returnUrl": "https://glovoapp.com/en/hosted-page-redirect/tokenization",
+            "resultEndpoint": "/v5/payment_instruments"
+          }
+        }
+      ]
+    }
+  }
+}
