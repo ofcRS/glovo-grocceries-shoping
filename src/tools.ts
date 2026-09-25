@@ -70,7 +70,13 @@ export function createServer(overrides: Partial<ServerDeps> = {}): McpServer {
   server.registerTool("preferences_read", {
     description: "Read the user's grocery and diet preferences markdown. Call before planning meals.",
     inputSchema: {},
-  }, guarded(async () => ({ markdown: await Bun.file(deps.preferencesPath).text() })));
+  }, guarded(async () => {
+    const file = Bun.file(deps.preferencesPath);
+    if (!(await file.exists())) {
+      throw new Error(`No preferences file at ${deps.preferencesPath}. Copy data/preferences.example.md there and fill it in.`);
+    }
+    return { markdown: await file.text() };
+  }));
 
   server.registerTool("dazoge_prices", {
     description: "Prices for one product across Georgian stores from Dazoge, by Dazoge product id (usually the EAN barcode).",

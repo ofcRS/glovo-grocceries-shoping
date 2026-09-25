@@ -3,6 +3,7 @@ data/browser-profile/
 data/*.db
 data/*.db-*
 data/discovery/
+data/preferences.md
 .env
 *.local
 

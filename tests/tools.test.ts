@@ -17,7 +17,7 @@ function testDeps() {
   const glovoSession = async () => ({ getAuth: async () => null, refresh: async () => null, close: async () => {} });
   // any test that reaches the Glovo API without its own fake fetch fails loudly instead of calling live Glovo
   const glovoFetch = (async () => { throw new Error("live Glovo is disabled in tests"); }) as unknown as typeof fetch;
-  return { db, dazoge, glovoSession, glovoFetch, preferencesPath: "data/preferences.md" };
+  return { db, dazoge, glovoSession, glovoFetch, preferencesPath: "data/preferences.example.md" };
 }
 
 const futureAuth = (token: string) => ({ accessToken: token, expiresAt: 4102444800, userId: 1 });
@@ -264,4 +264,11 @@ test("price_basket rejects a zero unitPrice: 0 is not a price", async () => {
   } });
   expect(res.isError).toBe(true);
   expect(textOf(res)).toMatch(/unitPrice/);
+});
+
+test("preferences_read explains what to do when the preferences file is missing", async () => {
+  const client = await connectedClient({ ...testDeps(), preferencesPath: "data/does-not-exist.md" });
+  const res = await client.callTool({ name: "preferences_read", arguments: {} });
+  expect(res.isError).toBe(true);
+  expect(textOf(res)).toContain("preferences.example.md");
 });
