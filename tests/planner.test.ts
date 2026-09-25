@@ -23,6 +23,10 @@ test("migrate applies each migration once, records it in schema_version and crea
   raw.close();
 });
 
+test("openDb sets a busy timeout so a concurrent writer waits instead of failing with SQLITE_BUSY", () => {
+  expect(db.query("pragma busy_timeout").get()).toEqual({ timeout: 5000 });
+});
+
 test("convertQty handles mass, volume and identity; throws on mismatch (Review Focus 5)", () => {
   expect(convertQty(500, "g", "kg")).toBe(0.5);
   expect(convertQty(1.5, "kg", "g")).toBe(1500);

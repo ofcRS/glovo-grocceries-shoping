@@ -1,4 +1,6 @@
 import { Database } from "bun:sqlite";
+import { mkdirSync } from "node:fs";
+import { dirname } from "node:path";
 import { MIGRATIONS } from "./schema";
 
 /** Applies the MIGRATIONS entries beyond the recorded schema_version, one transaction each. Returns how many ran. */
@@ -15,9 +17,12 @@ export function migrate(db: Database): number {
   return Math.max(0, MIGRATIONS.length - current);
 }
 
+/** Opens (creating the file and its parent directory if needed) and migrates the database. */
 export function openDb(path: string): Database {
+  if (path !== ":memory:") mkdirSync(dirname(path), { recursive: true });
   const db = new Database(path, { create: true });
-  db.exec("pragma journal_mode = WAL; pragma foreign_keys = on;");
+  // busy_timeout: the MCP server and a script may hold the file at once; wait up to 5 s for a lock instead of failing
+  db.exec("pragma journal_mode = WAL; pragma foreign_keys = on; pragma busy_timeout = 5000;");
   migrate(db);
   return db;
 }
