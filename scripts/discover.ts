@@ -1,8 +1,8 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { config } from "../src/config";
-import { GlovoSession } from "../src/glovo/session";
-import { shouldRecord, redact, fixtureName, type Recording } from "../src/glovo/recorder";
+import { GlovoSession, HOME } from "../src/glovo/session";
+import { shouldRecord, redact, redactUrl, fixtureName, type Recording } from "../src/glovo/recorder";
 
 const outDir = resolve(config.discoveryDir, new Date().toISOString().replace(/[:.]/g, "-"));
 mkdirSync(outDir, { recursive: true });
@@ -24,18 +24,18 @@ page.on("response", async (res) => {
     const post = req.postData();
     if (post) { try { reqBody = JSON.parse(post); } catch { reqBody = post; } }
     const rec: Recording = {
-      seq: ++seq, method: req.method(), url: req.url(), status: res.status(),
+      seq: ++seq, method: req.method(), url: redactUrl(req.url()), status: res.status(),
       requestBody: redact(reqBody), responseBody: redact(body), contentType: ct,
     };
     recordings.push(rec);
     writeFileSync(resolve(outDir, fixtureName(rec.seq, rec.method, rec.url)), JSON.stringify(rec, null, 2));
     console.log(`[${String(rec.seq).padStart(3, "0")}] ${rec.method} ${rec.status} ${new URL(rec.url).pathname}`);
   } catch (err) {
-    console.error(`[skip] ${res.url()}: ${err instanceof Error ? err.message : String(err)}`);
+    console.error(`[skip] ${redactUrl(res.url())}: ${err instanceof Error ? err.message : String(err)}`);
   }
 });
 
-await page.goto("https://glovoapp.com/en/ge/tbilisi/", { waitUntil: "domcontentloaded" });
+await page.goto(HOME, { waitUntil: "domcontentloaded" });
 console.log(`\nRecording to ${outDir}\nFollow docs/glovo-discovery.md in the browser window, then press Enter here to finish.\n`);
 for await (const _ of console) break;
 
