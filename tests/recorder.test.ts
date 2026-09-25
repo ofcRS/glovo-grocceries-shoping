@@ -180,22 +180,26 @@ test("session, device, location and coordinate keys are redacted without catchin
   } as unknown as typeof out);
 });
 
-test("payment card fields are redacted by fragment and bin/pan by exact key", () => {
+test("payment fields are redacted by exact key, last4/expiry/cvv/iban also by fragment", () => {
   const out = redact({
     paymentMethod: {
       id: 11, type: "CARD", card: { brand: "VISA" }, cardNumber: "4111111111111111", holderName: "NINO B", cardHolder: "NINO B",
+      card_holder_name: "NINO B", cardToken: "t", cardLast4: "1111", lastFourDigits: "1111", maskedPan: "411111******1111", cvc: "123",
+      expirationDate: "12/30", expiry_date: "12/30", expiration: "12/30",
       last4: "1111", lastFour: "1111", expirationMonth: 12, expiryYear: 2030, cvv: "123", iban: "GE00TB0000000000000000",
       bin: "411111", pan: "4111111111111111",
     },
-    binary: "keep", panel: "keep", company: "keep",
+    binary: "keep", panel: "keep", company: "keep", placeholder: "Search", cardType: "PRODUCT",
   });
   expect(out).toEqual({
     paymentMethod: {
-      id: 11, type: "CARD", card: "[REDACTED]", cardNumber: "[REDACTED]", holderName: "[REDACTED]", cardHolder: "[REDACTED]",
+      id: 11, type: "CARD", card: { brand: "VISA" }, cardNumber: "[REDACTED]", holderName: "[REDACTED]", cardHolder: "[REDACTED]",
+      card_holder_name: "[REDACTED]", cardToken: "[REDACTED]", cardLast4: "[REDACTED]", lastFourDigits: "[REDACTED]", maskedPan: "[REDACTED]", cvc: "[REDACTED]",
+      expirationDate: "[REDACTED]", expiry_date: "[REDACTED]", expiration: "[REDACTED]",
       last4: "[REDACTED]", lastFour: "[REDACTED]", expirationMonth: "[REDACTED]", expiryYear: "[REDACTED]", cvv: "[REDACTED]", iban: "[REDACTED]",
       bin: "[REDACTED]", pan: "[REDACTED]",
     },
-    binary: "keep", panel: "keep", company: "keep",
+    binary: "keep", panel: "keep", company: "keep", placeholder: "Search", cardType: "PRODUCT",
   } as unknown as typeof out);
 });
 
@@ -257,4 +261,12 @@ test("endpointTemplate replaces numeric path segments only", () => {
   expect(endpointTemplate("https://api.glovoapp.com/v3/me")).toBe("/v3/me");
   expect(endpointTemplate("https://api.glovoapp.com/v3/stores/45/addresses/1234/content?offset=0")).toBe("/v3/stores/{id}/addresses/{id}/content");
   expect(endpointTemplate("https://api.glovoapp.com/v4/customers/orders/987")).toBe("/v4/customers/orders/{id}");
+});
+
+test("catalog keys containing 'card' survive while exact payment keys are redacted", () => {
+  const out = redact({ cards: [{ type: "PRODUCT_CARD", cardId: 5, name: "Milk" }], paymentMethod: { cardNumber: "4111", holderName: "N", last4: "1111" } });
+  expect(out).toEqual({
+    cards: [{ type: "PRODUCT_CARD", cardId: 5, name: "Milk" }],
+    paymentMethod: { cardNumber: "[REDACTED]", holderName: "[REDACTED]", last4: "[REDACTED]" },
+  });
 });

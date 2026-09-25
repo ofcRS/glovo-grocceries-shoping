@@ -30,13 +30,15 @@ const REDACT_KEYS = new Set([
   "authorization", "cookie", "set-cookie", "accesstoken", "refreshtoken", "token",
   "email", "phone", "phonenumber", "mobile", "placeid", "street",
   "customername", "courier", "couriername", "courierphone",
-  "bin", "pan",
+  // payment: exact keys only, because catalog and feed components use keys containing "card" (cards, cardId, cardType)
+  "cardnumber", "cardholder", "cardholdername", "holdername", "cardtoken", "cardlast4", "last4", "lastfour", "lastfourdigits",
+  "maskedpan", "pan", "bin", "cvv", "cvc", "expirationdate", "expirydate", "expiration", "expiry", "iban",
 ].map(normKey));
 /** Any key containing one of these, or starting with one of the prefixes, is also replaced whole. */
 const SENSITIVE_FRAGMENTS = [
   "email", "phone", "password", "token", "secret", "cookie", "authorization",
   "session", "device", "location", "latitude", "longitude", "coordinates",
-  "card", "holder", "last4", "lastfour", "expiration", "expiry", "cvv", "iban",
+  "last4", "lastfour", "expiration", "expiry", "cvv", "iban",
   "firstname", "lastname", "fullname", "givenname", "familyname", "surname",
 ];
 const SENSITIVE_PREFIXES = ["street", "postal"];
