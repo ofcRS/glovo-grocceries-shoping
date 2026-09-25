@@ -2,6 +2,7 @@
 data/browser-profile/
 data/*.db
 data/*.db-*
+data/discovery/
 .env
 *.local
 
