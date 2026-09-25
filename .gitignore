@@ -1,0 +1,11 @@
+# secrets and personal data — never commit
+data/browser-profile/
+data/*.db
+data/*.db-*
+.env
+*.local
+
+# runtime
+node_modules/
+dist/
+screenshots/
