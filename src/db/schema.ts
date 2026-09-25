@@ -32,7 +32,7 @@ export const MIGRATIONS: string[] = [
     ingredient text,
     qty real not null,
     unit text not null,
-    price integer not null
+    line_total integer not null
   );
   create table if not exists meal (
     id integer primary key,

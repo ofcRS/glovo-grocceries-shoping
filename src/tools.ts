@@ -123,28 +123,38 @@ export function createServer(overrides: Partial<ServerDeps> = {}): McpServer {
   }));
 
   server.registerTool("meals_recent", {
-    description: "Meals planned or cooked in the last N days, for variety and pantry reasoning.",
+    description: "Meals from the last N days through today (Tbilisi date), any status, for variety and pantry reasoning. " +
+      "Use meals_upcoming for the plan ahead.",
     inputSchema: { days: z.number().int().min(1).max(60).default(14) },
   }, guarded(({ days }) => meals.recent(days)));
+  server.registerTool("meals_upcoming", {
+    description: "Meals from today (Tbilisi date) through the next N days, any status: the current plan. Check it before planning.",
+    inputSchema: { days: z.number().int().min(1).max(60).default(7) },
+  }, guarded(({ days }) => meals.upcoming(days)));
   server.registerTool("meals_plan_save", {
-    description: "Save a set of planned meals with their ingredients.",
+    description: "Save a set of planned meals with their ingredients. Re-saving replaces planned meals in the same date and slot; " +
+      "cooked and skipped meals there are kept and the new meal is added alongside.",
     inputSchema: { meals: z.array(z.object({
       date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), slot: SLOT, title: z.string().min(1), notes: z.string().nullable().default(null),
       ingredients: z.array(z.object({ ingredient: z.string().min(1), qty: z.number().positive(), unit: z.string().min(1) })),
     })).min(1) },
   }, guarded(({ meals: m }) => ({ ids: meals.savePlan(m) })));
   server.registerTool("meal_mark", {
-    description: "Mark a meal cooked or skipped. Cooking decrements the pantry once.",
+    description: "Mark a meal planned, cooked or skipped. The first transition to cooked decrements the pantry once; " +
+      "ingredients whose unit cannot convert are listed in pantrySkipped.",
     inputSchema: { id: z.number().int(), status: z.enum(["planned", "cooked", "skipped"]) },
   }, guarded(({ id, status }) => meals.mark(id, status)));
 
   server.registerTool("delivery_record", {
-    description: "Record a placed Glovo order and add its items to the pantry. priceTetri is the unit price in tetri. " +
+    description: "Record a placed Glovo order and add its items to the pantry. Per item, lineTotalTetri is what was paid for " +
+      "that line in integer tetri (1 GEL = 100 tetri); the delivery total is their sum. qty and unit are the physical amount " +
+      "added to the pantry (10 pcs of eggs, 0.8 kg of chicken, 3 l of milk), not a number of packs or a price multiplier. " +
+      'Example item: {productName:"Eggs 10", lineTotalTetri:550, qty:10, unit:"pcs", ingredient:"eggs"}. ' +
       "`ingredient` is the pantry key the item is stored under (use the same short name meals use, e.g. 'milk'); " +
       "when omitted the item is filed under productName and meal ingredients will not match it. " +
-      "placedAt is an ISO 8601 datetime with Z or an offset; it defaults to now.",
+      "placedAt is ISO 8601 with seconds and offset, e.g. 2026-09-25T10:15:00+04:00; it defaults to now.",
     inputSchema: { glovoOrderId: z.string().min(1), store: z.string().min(1), placedAt: z.iso.datetime({ offset: true }).optional(), items: z.array(z.object({
-      productName: z.string().min(1), qty: z.number().positive(), unit: z.string().min(1), priceTetri: z.number().int().min(0), ingredient: z.string().optional(),
+      productName: z.string().min(1), lineTotalTetri: z.number().int().min(0), qty: z.number().positive(), unit: z.string().min(1), ingredient: z.string().optional(),
     })).min(1) },
   }, guarded((input) => {
     // stored as UTC so deliveries_recent, which sorts placedAt as text, sorts chronologically

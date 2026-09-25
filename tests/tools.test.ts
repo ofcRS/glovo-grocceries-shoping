@@ -2,6 +2,7 @@ import { test, expect } from "bun:test";
 import { connectedClient, textOf } from "./helpers/mcp";
 import { openDb } from "../src/db/index";
 import { DazogeClient } from "../src/dazoge/client";
+import { tbilisiToday } from "../src/planner/meals";
 
 const fixture = (name: string) => Bun.file(`tests/fixtures/dazoge/${name}`).text();
 
@@ -31,7 +32,7 @@ test("registers the full tool set", async () => {
   const client = await connectedClient(testDeps());
   const names = (await client.listTools()).tools.map((t) => t.name).sort();
   for (const n of ["dazoge_prices", "dazoge_search", "glovo_session_status", "pantry_list", "pantry_set", "pantry_adjust",
-    "meals_recent", "meals_plan_save", "meal_mark", "delivery_record", "deliveries_recent", "note_add", "notes_recent", "preferences_read", "price_basket"]) {
+    "meals_recent", "meals_upcoming", "meals_plan_save", "meal_mark", "delivery_record", "deliveries_recent", "note_add", "notes_recent", "preferences_read", "price_basket"]) {
     expect(names).toContain(n);
   }
 });
@@ -157,7 +158,7 @@ test("glovo_session_status closes the browser session even when the check fails"
 
 const delivery = (glovoOrderId: string, placedAt?: string) => ({
   glovoOrderId, store: "agrohub", ...(placedAt === undefined ? {} : { placedAt }),
-  items: [{ productName: "Santé milk 2.5% 1L", ingredient: "milk", qty: 1, unit: "l", priceTetri: 399 }],
+  items: [{ productName: "Santé milk 2.5% 1L", ingredient: "milk", qty: 1, unit: "l", lineTotalTetri: 399 }],
 });
 
 test("delivery_record rejects a placedAt that is not an ISO datetime", async () => {
@@ -184,7 +185,65 @@ test("tool descriptions state the units and pantry semantics Claude needs", asyn
   expect(desc.price_basket).toMatch(/integer tetri/);
   for (const field of ["unitPrice", "deliveryFee", "minOrder", "marginTetri"]) expect(desc.price_basket).toContain(field);
   expect(desc.delivery_record).toMatch(/pantry key/);
+  expect(desc.delivery_record).toContain("lineTotalTetri");
+  expect(desc.delivery_record).toContain(`{productName:"Eggs 10", lineTotalTetri:550, qty:10, unit:"pcs", ingredient:"eggs"}`);
+  expect(desc.delivery_record).toContain("ISO 8601 with seconds and offset, e.g. 2026-09-25T10:15:00+04:00");
+  expect(desc.delivery_record).not.toContain("priceTetri");
+  expect(desc.meal_mark).toBe("Mark a meal planned, cooked or skipped. The first transition to cooked decrements the pantry once; " +
+    "ingredients whose unit cannot convert are listed in pantrySkipped.");
+  expect(desc.meals_plan_save).toMatch(/re-saving replaces planned meals in the same date and slot/i);
+  expect(desc.meals_upcoming).toMatch(/today/);
   expect(desc.delivery_record).toMatch(/filed under productName/);
   expect(desc.pantry_adjust).toMatch(/floor at zero/);
   expect(desc.pantry_adjust).toContain("stored: false");
+});
+
+test("delivery_record totals line totals, fills the pantry with physical amounts and rejects the old priceTetri shape", async () => {
+  const client = await connectedClient(testDeps());
+  const res = await client.callTool({ name: "delivery_record", arguments: { glovoOrderId: "o-2", store: "agrohub", items: [
+    { productName: "Eggs 10", lineTotalTetri: 550, qty: 10, unit: "pcs", ingredient: "eggs" },
+    { productName: "Chicken breast 800 g", lineTotalTetri: 1520, qty: 0.8, unit: "kg", ingredient: "chicken" },
+  ] } });
+  expect(JSON.parse(textOf(res)).total).toBe("20.70 GEL");
+  const pantry = JSON.parse(textOf(await client.callTool({ name: "pantry_list", arguments: {} })));
+  expect(pantry.map((r: { ingredient: string; qty: number; unit: string }) => [r.ingredient, r.qty, r.unit])).toEqual([["chicken", 0.8, "kg"], ["eggs", 10, "pcs"]]);
+  const old = await client.callTool({ name: "delivery_record", arguments: { glovoOrderId: "o-3", store: "agrohub", items: [
+    { productName: "Eggs 10", priceTetri: 550, qty: 1, unit: "pcs" },
+  ] } });
+  expect(old.isError).toBe(true);
+  const fractional = await client.callTool({ name: "delivery_record", arguments: { glovoOrderId: "o-4", store: "agrohub", items: [
+    { productName: "Eggs 10", lineTotalTetri: 5.5, qty: 10, unit: "pcs" },
+  ] } });
+  expect(fractional.isError).toBe(true);
+});
+
+test("meal_mark returns the meal and the ingredients the pantry could not take", async () => {
+  const client = await connectedClient(testDeps());
+  await client.callTool({ name: "pantry_set", arguments: { ingredient: "eggs", qty: 10, unit: "pcs" } });
+  await client.callTool({ name: "pantry_set", arguments: { ingredient: "rice", qty: 1, unit: "kg" } });
+  const [id] = JSON.parse(textOf(await client.callTool({ name: "meals_plan_save", arguments: { meals: [
+    { date: "2026-09-25", slot: "dinner", title: "Egg fried rice", ingredients: [
+      { ingredient: "rice", qty: 200, unit: "g" }, { ingredient: "eggs", qty: 100, unit: "g" },
+    ] },
+  ] } }))).ids as number[];
+  const body = JSON.parse(textOf(await client.callTool({ name: "meal_mark", arguments: { id, status: "cooked" } })));
+  expect(body.meal).toMatchObject({ id, status: "cooked", title: "Egg fried rice" });
+  expect(body.pantrySkipped).toEqual([{ ingredient: "eggs", reason: "Cannot convert g to pcs" }]);
+});
+
+test("meals_upcoming lists the plan ahead from today in Tbilisi, and a re-saved slot shows once", async () => {
+  const client = await connectedClient(testDeps());
+  const shift = (days: number) => new Date(Date.parse(`${tbilisiToday()}T00:00:00Z`) + days * 86_400_000).toISOString().slice(0, 10);
+  // dates are relative to the test's today; a tomorrow meal is listed even if Tbilisi midnight passes mid-test
+  const save = (date: string, title: string) => client.callTool({ name: "meals_plan_save", arguments: { meals: [
+    { date, slot: "dinner", title, ingredients: [] },
+  ] } });
+  await save(shift(-1), "Yesterday");
+  await save(shift(1), "Tomorrow draft");
+  await save(shift(1), "Tomorrow");
+  await save(shift(30), "Next month");
+  const upcoming = JSON.parse(textOf(await client.callTool({ name: "meals_upcoming", arguments: {} })));
+  expect(upcoming.map((m: { title: string }) => m.title)).toEqual(["Tomorrow"]);
+  const recent = JSON.parse(textOf(await client.callTool({ name: "meals_recent", arguments: {} })));
+  expect(recent.map((m: { title: string }) => m.title)).toContain("Yesterday");
 });
