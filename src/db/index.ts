@@ -21,8 +21,8 @@ export function migrate(db: Database): number {
 export function openDb(path: string): Database {
   if (path !== ":memory:") mkdirSync(dirname(path), { recursive: true });
   const db = new Database(path, { create: true });
-  // busy_timeout: the MCP server and a script may hold the file at once; wait up to 5 s for a lock instead of failing
-  db.exec("pragma journal_mode = WAL; pragma foreign_keys = on; pragma busy_timeout = 5000;");
+  // busy_timeout first: the MCP server and a script may hold the file at once, and the WAL switch itself takes a lock
+  db.exec("pragma busy_timeout = 5000; pragma journal_mode = WAL; pragma foreign_keys = on;");
   migrate(db);
   return db;
 }

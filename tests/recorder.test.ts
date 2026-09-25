@@ -270,3 +270,18 @@ test("catalog keys containing 'card' survive while exact payment keys are redact
     paymentMethod: { cardNumber: "[REDACTED]", holderName: "[REDACTED]", last4: "[REDACTED]" },
   });
 });
+
+test("redactHeaders drops HTTP/2 pseudo-headers and redacts the query string of referer and origin", () => {
+  const referer = "https://glovoapp.com/ge/en/tbilisi/?lat=41.7123&lng=44.7811&email=a%40b.c&page=2";
+  const out = redactHeaders({
+    ":method": "GET", ":path": "/v3/feeds?latitude=41.7123&longitude=44.7811", ":authority": "api.glovoapp.com",
+    referer, origin: "https://glovoapp.com", "glovo-api-version": "14",
+  });
+  expect(Object.keys(out).sort()).toEqual(["glovo-api-version", "origin", "referer"]);
+  expect(out.referer).toBe(redactUrl(referer));
+  expect(out.referer).not.toContain("41.7123");
+  expect(out.referer).not.toContain("44.7811");
+  expect(out.referer).not.toContain("a%40b.c");
+  expect(out.referer).toContain("page=2");
+  expect(out.origin).toBe("https://glovoapp.com");
+});

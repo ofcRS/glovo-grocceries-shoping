@@ -177,7 +177,8 @@ Input: ingredient list with quantities, tagged by category.
 - `product(id, store_id, glovo_id, name, barcode, unit, last_price, last_seen)`
 - `product_match(product_id, dazoge_barcode, confidence, confirmed_at)`
 - `delivery(id, glovo_order_id, store_id, placed_at, total, status)`
-- `delivery_item(delivery_id, product_id, qty, price)`
+- `delivery_item(delivery_id, product_name, ingredient nullable, qty, unit, line_total)` — line_total is the
+  integer tetri paid for the whole line, so qty can stay in pantry units
 - `meal(id, date, slot, title, notes, status)` slot in breakfast, lunch,
   dinner; status in planned, cooked, skipped
 - `meal_ingredient(meal_id, ingredient, qty, unit, product_id nullable)`

@@ -154,6 +154,9 @@ export function redactUrl(url: string): string {
   return u.toString();
 }
 
+/** Headers whose value is a URL, so their query string gets the same treatment as the request URL. */
+const URL_HEADERS = new Set(["referer", "referrer", "origin"]);
+
 /**
  * Request headers by the same key rules as `redact` (so `authorization`, `cookie` and anything naming a token, secret,
  * session, device or location goes); the rest, such as `glovo-api-version`, is kept with JWTs and phones scrubbed.
@@ -161,8 +164,12 @@ export function redactUrl(url: string): string {
 export function redactHeaders(headers: Record<string, string>): Record<string, string> {
   const out: Record<string, string> = {};
   for (const [k, v] of Object.entries(headers)) {
+    // HTTP/2 pseudo-headers (`:path`, `:authority`, ...) duplicate the request line, and `:path` carries the raw
+    // query string that `redactUrl` already cleaned on `url`, so they are dropped rather than copied.
+    if (k.startsWith(":")) continue;
     const sensitive = keyRule(k) !== null || HEADER_FRAGMENTS.some((f) => normKey(k).includes(f));
-    out[k] = sensitive ? REDACTED : scrubString(v);
+    const isUrl = URL_HEADERS.has(normKey(k));
+    out[k] = sensitive ? REDACTED : isUrl ? scrubString(redactUrl(v)) : scrubString(v);
   }
   return out;
 }
