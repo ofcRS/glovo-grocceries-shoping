@@ -1,5 +1,7 @@
 import { test, expect, beforeEach } from "bun:test";
-import { openDb } from "../src/db/index";
+import { Database } from "bun:sqlite";
+import { openDb, migrate } from "../src/db/index";
+import { MIGRATIONS } from "../src/db/schema";
 import { convertQty, UnitMismatchError } from "../src/planner/units";
 import { PantryRepo } from "../src/planner/pantry";
 import { MealsRepo } from "../src/planner/meals";
@@ -10,11 +12,15 @@ import { SqliteMatchCache } from "../src/planner/matchCache";
 let db: ReturnType<typeof openDb>;
 beforeEach(() => { db = openDb(":memory:"); });
 
-test("openDb is idempotent and creates the tables", () => {
-  openDb(":memory:");
-  const names = db.query("select name from sqlite_master where type='table' order by name").all() as { name: string }[];
+test("migrate applies each migration once, records it in schema_version and creates the tables", () => {
+  const raw = new Database(":memory:");
+  expect(migrate(raw)).toBe(MIGRATIONS.length);
+  expect(migrate(raw)).toBe(0);
+  expect((raw.query("select count(*) as n from schema_version").get() as { n: number }).n).toBe(MIGRATIONS.length);
+  const names = raw.query("select name from sqlite_master where type='table' order by name").all() as { name: string }[];
   const set = new Set(names.map((n) => n.name));
   for (const t of ["product", "product_match", "delivery", "delivery_item", "meal", "meal_ingredient", "pantry", "note", "checkout_log"]) expect(set.has(t)).toBe(true);
+  raw.close();
 });
 
 test("convertQty handles mass, volume and identity; throws on mismatch (Review Focus 5)", () => {
@@ -34,6 +40,13 @@ test("pantry set, adjust with unit conversion, never negative", () => {
   expect(() => p.adjust("rice", 1, "l")).toThrow(UnitMismatchError);
   p.adjust("eggs", 10, "pcs"); // adjust on a missing row creates it
   expect(p.list().map((r) => r.ingredient).sort()).toEqual(["eggs", "rice"]);
+});
+
+test("pantry quantities are rounded so float residue does not survive", () => {
+  const p = new PantryRepo(db);
+  p.set("x", 0.1, "kg");
+  p.adjust("x", 200, "g");
+  expect(p.adjust("x", -300, "g").qty).toBe(0);
 });
 
 test("meals savePlan, recent window, mark cooked decrements pantry", () => {
@@ -101,6 +114,28 @@ test("delivery record rolls back the delivery, its items and earlier pantry incr
   expect(d.recent(5)).toEqual([]);
   expect((db.query("select count(*) as n from delivery_item").get() as { n: number }).n).toBe(0);
   expect(p.get("milk")!.qty).toBe(1);
+});
+
+test("cooking a meal with an ingredient not in the pantry adds no row, so a later delivery in another unit succeeds", () => {
+  const p = new PantryRepo(db);
+  const m = new MealsRepo(db, p);
+  const [id] = m.savePlan([
+    { date: "2026-09-25", slot: "breakfast", title: "Omelette", notes: null, ingredients: [{ ingredient: "onion", qty: 150, unit: "g" }] },
+  ]);
+  m.mark(id!, "cooked");
+  expect(p.list().find((r) => r.ingredient === "onion")).toBeUndefined();
+  expect(p.adjust("onion", -1, "pcs")).toMatchObject({ ingredient: "onion", qty: 0, unit: "pcs" });
+  expect(p.get("onion")).toBeNull();
+  const d = new DeliveriesRepo(db, p);
+  d.record({
+    glovoOrderId: "G-3", store: "goodwill",
+    items: [
+      { productName: "Onion", qty: 2, unit: "pcs", priceTetri: 120, ingredient: "onion" },
+      { productName: "Eggs 10", qty: 1, unit: "pcs", priceTetri: 550, ingredient: "eggs" },
+    ],
+  });
+  expect(p.get("onion")).toMatchObject({ qty: 2, unit: "pcs" });
+  expect(p.get("eggs")).toMatchObject({ qty: 1, unit: "pcs" });
 });
 
 test("notes add and recent newest first", () => {
