@@ -9,3 +9,6 @@ data/*.db-*
 node_modules/
 dist/
 screenshots/
+
+# SDD scratch
+.superpowers/
