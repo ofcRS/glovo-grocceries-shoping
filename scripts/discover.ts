@@ -2,7 +2,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { config } from "../src/config";
 import { GlovoSession, HOME } from "../src/glovo/session";
-import { shouldRecord, redact, redactUrl, fixtureName, type Recording } from "../src/glovo/recorder";
+import { shouldRecord, redact, redactUrl, redactHeaders, redactBody, endpointTemplate, fixtureName, type Recording } from "../src/glovo/recorder";
 
 const outDir = resolve(config.discoveryDir, new Date().toISOString().replace(/[:.]/g, "-"));
 mkdirSync(outDir, { recursive: true });
@@ -20,12 +20,15 @@ page.on("response", async (res) => {
     const ct = res.headers()["content-type"] ?? "";
     let body: unknown = null;
     if (ct.includes("json")) { try { body = await res.json(); } catch { body = null; } }
-    let reqBody: unknown = null;
-    const post = req.postData();
-    if (post) { try { reqBody = JSON.parse(post); } catch { reqBody = post; } }
+    // allHeaders() includes the cookie and other security headers that headers() leaves out; redactHeaders
+    // replaces their values, so the fixture shows which ones the web app sends without what they hold.
+    let reqHeaders: Record<string, string>;
+    try { reqHeaders = await req.allHeaders(); } catch { reqHeaders = req.headers(); }
     const rec: Recording = {
       seq: ++seq, method: req.method(), url: redactUrl(req.url()), status: res.status(),
-      requestBody: redact(reqBody), responseBody: redact(body), contentType: ct,
+      requestHeaders: redactHeaders(reqHeaders),
+      requestBody: redactBody(req.postData(), reqHeaders["content-type"] ?? ""),
+      responseBody: redact(body), contentType: ct,
     };
     recordings.push(rec);
     writeFileSync(resolve(outDir, fixtureName(rec.seq, rec.method, rec.url)), JSON.stringify(rec, null, 2));
@@ -41,8 +44,7 @@ for await (const _ of console) break;
 
 const summary = new Map<string, { count: number; statuses: Set<number>; keys: Set<string> }>();
 for (const r of recordings) {
-  const path = new URL(r.url).pathname.replace(/\d+/g, "{id}");
-  const k = `${r.method} ${path}`;
+  const k = `${r.method} ${endpointTemplate(r.url)}`;
   const s = summary.get(k) ?? { count: 0, statuses: new Set(), keys: new Set() };
   s.count++; s.statuses.add(r.status);
   collectKeys(r.responseBody, s.keys, 0);

@@ -1,5 +1,5 @@
 import { test, expect } from "bun:test";
-import { shouldRecord, redact, redactUrl, fixtureName } from "../src/glovo/recorder";
+import { shouldRecord, redact, redactUrl, redactHeaders, redactBody, fixtureName, endpointTemplate } from "../src/glovo/recorder";
 
 test("shouldRecord keeps api.glovoapp.com and drops analytics, images and other hosts", () => {
   expect(shouldRecord("https://api.glovoapp.com/v3/me")).toBe(true);
@@ -116,4 +116,145 @@ test("redactUrl scrubs sensitive query values and leaves the rest of the url alo
     .toBe("https://api.glovoapp.com/v3/feeds?latitude=REDACTED&longitude=REDACTED&limit=10");
   expect(redactUrl("https://api.glovoapp.com/v3/stores/45/content?offset=0")).toBe("https://api.glovoapp.com/v3/stores/45/content?offset=0");
   expect(redactUrl("not a url")).toBe("not a url");
+});
+
+// A syntactically JWT-shaped fake: {"alg":"none"}.{"sub":"test"}.fakesignature — never a real token.
+const FAKE_JWT = "eyJhbGciOiJub25lIn0.eyJzdWIiOiJ0ZXN0In0.fakesignature123";
+
+test("redactHeaders redacts authorization and cookie and keeps glovo-api-version", () => {
+  expect(redactHeaders({ authorization: `Bearer ${FAKE_JWT}`, cookie: "glovo_auth_info=abc", "glovo-api-version": "14" }))
+    .toEqual({ authorization: "[REDACTED]", cookie: "[REDACTED]", "glovo-api-version": "14" });
+});
+
+test("redactHeaders hides session, device, location and token headers but keeps the Glovo protocol headers", () => {
+  const out = redactHeaders({
+    "glovo-location-city-code": "TBI", "glovo-language-code": "en", "glovo-app-platform": "web",
+    "accept-language": "en-US,en;q=0.9", "content-type": "application/json",
+    "glovo-dynamic-session-id": "s-1", "glovo-device-urn": "glv:device:1", "glovo-delivery-location-latitude": "41.7",
+    "glovo-delivery-location-longitude": "44.8", "x-csrf-token": "t", "x-api-secret": "s", "glovo-perseus-client-id": "c-1",
+    "x-debug": FAKE_JWT,
+  });
+  expect(out).toEqual({
+    "glovo-location-city-code": "TBI", "glovo-language-code": "en", "glovo-app-platform": "web",
+    "accept-language": "en-US,en;q=0.9", "content-type": "application/json",
+    "glovo-dynamic-session-id": "[REDACTED]", "glovo-device-urn": "[REDACTED]", "glovo-delivery-location-latitude": "[REDACTED]",
+    "glovo-delivery-location-longitude": "[REDACTED]", "x-csrf-token": "[REDACTED]", "x-api-secret": "[REDACTED]", "glovo-perseus-client-id": "[REDACTED]",
+    "x-debug": "[JWT]",
+  });
+});
+
+test("an object with only a phone is a store, not a person: its name survives while the phone is redacted", () => {
+  const out = redact({ name: "Agrohub", phoneNumber: { number: "+995322000000" } });
+  expect(out.name).toBe("Agrohub");
+  expect<unknown>(out.phoneNumber).toBe("[REDACTED]");
+});
+
+test("email, password or a first/last/full name key marks a person, so the name is redacted", () => {
+  expect(redact({ name: "Nino", email: "x@y" })).toEqual({ name: "[REDACTED]", email: "[REDACTED]" });
+  expect(redact({ name: "Nino", password: "p" })).toEqual({ name: "[REDACTED]", password: "[REDACTED]" });
+  expect(redact({ name: "Nino B", lastName: "B" })).toEqual({ name: "[REDACTED]", lastName: "[REDACTED]" });
+  expect(redact({ username: "nino88", customerFullName: "Nino B" })).toEqual({ username: "[REDACTED]", customerFullName: "[REDACTED]" });
+});
+
+test("courier redaction is limited to courier, courierName and courierPhone, so courier fees survive", () => {
+  const out = redact({
+    courierFee: 300, courierTip: 100, fees: { courierFeeTetri: 250 },
+    courier: { name: "Giorgi", photo: "x.jpg" }, courierName: "Giorgi", courierPhone: "599123456",
+  });
+  expect(out).toEqual({
+    courierFee: 300, courierTip: 100, fees: { courierFeeTetri: 250 },
+    courier: "[REDACTED]", courierName: "[REDACTED]", courierPhone: "[REDACTED]",
+  } as unknown as typeof out);
+});
+
+test("session, device, location and coordinate keys are redacted without catching words that merely contain 'lat'", () => {
+  const out = redact({
+    sessionId: "s", deviceId: "d", userLocation: { x: 1 }, coordinates: [41.7, 44.8], geoLatitude: 41.7,
+    userLat: 41.7, pickup_lng: 44.8, latLng: "41.7,44.8", LNG: 44.8,
+    platformFee: 50, relatedProducts: [1], translations: { en: "Milk" }, templateId: 3, chocolate: "dark",
+  });
+  expect(out).toEqual({
+    sessionId: "[REDACTED]", deviceId: "[REDACTED]", userLocation: "[REDACTED]", coordinates: "[REDACTED]", geoLatitude: "[REDACTED]",
+    userLat: "[REDACTED]", pickup_lng: "[REDACTED]", latLng: "[REDACTED]", LNG: "[REDACTED]",
+    platformFee: 50, relatedProducts: [1], translations: { en: "Milk" }, templateId: 3, chocolate: "dark",
+  } as unknown as typeof out);
+});
+
+test("payment card fields are redacted by fragment and bin/pan by exact key", () => {
+  const out = redact({
+    paymentMethod: {
+      id: 11, type: "CARD", card: { brand: "VISA" }, cardNumber: "4111111111111111", holderName: "NINO B", cardHolder: "NINO B",
+      last4: "1111", lastFour: "1111", expirationMonth: 12, expiryYear: 2030, cvv: "123", iban: "GE00TB0000000000000000",
+      bin: "411111", pan: "4111111111111111",
+    },
+    binary: "keep", panel: "keep", company: "keep",
+  });
+  expect(out).toEqual({
+    paymentMethod: {
+      id: 11, type: "CARD", card: "[REDACTED]", cardNumber: "[REDACTED]", holderName: "[REDACTED]", cardHolder: "[REDACTED]",
+      last4: "[REDACTED]", lastFour: "[REDACTED]", expirationMonth: "[REDACTED]", expiryYear: "[REDACTED]", cvv: "[REDACTED]", iban: "[REDACTED]",
+      bin: "[REDACTED]", pan: "[REDACTED]",
+    },
+    binary: "keep", panel: "keep", company: "keep",
+  } as unknown as typeof out);
+});
+
+test("JWT-shaped strings are scrubbed anywhere, including under harmless keys and inside longer strings", () => {
+  const out = redact({ blob: FAKE_JWT, redirect: `https://glovoapp.com/cb?state=${FAKE_JWT}`, items: [FAKE_JWT], short: "eyJ.not.long" });
+  expect(out).toEqual({ blob: "[JWT]", redirect: "https://glovoapp.com/cb?state=[JWT]", items: ["[JWT]"], short: "eyJ.not.long" });
+});
+
+test("redactUrl scrubs JWTs in query values under harmless parameter names", () => {
+  expect(redactUrl(`https://api.glovoapp.com/v3/cb?state=${FAKE_JWT}&limit=10`))
+    .toBe("https://api.glovoapp.com/v3/cb?state=%5BJWT%5D&limit=10");
+});
+
+test("redactBody redacts JSON bodies by key and form-encoded bodies per parameter", () => {
+  expect(redactBody(JSON.stringify({ email: "a@b.c", query: "milk" }), "application/json")).toEqual({ email: "[REDACTED]", query: "milk" });
+  expect(redactBody("phone=599123456&q=milk&access_token=abc&note=call+599+12+34+56", "application/x-www-form-urlencoded; charset=UTF-8"))
+    .toBe("phone=REDACTED&q=milk&access_token=REDACTED&note=call+%5BPHONE%5D");
+});
+
+test("redactBody replaces any other non-JSON body and passes empty bodies through as null", () => {
+  expect(redactBody("<order><phone>599123456</phone></order>", "text/xml")).toBe("[NON-JSON BODY REDACTED]");
+  expect(redactBody("free text with a street", "")).toBe("[NON-JSON BODY REDACTED]");
+  expect(redactBody(null, "application/json")).toBeNull();
+  expect(redactBody("", "application/json")).toBeNull();
+});
+
+test("address-like objects redact every string and number leaf except city, country, type, label and id", () => {
+  const out = redact({
+    deliveryAddress: {
+      id: 9, cityCode: "TBI", countryCode: "GE", cityName: "Tbilisi", city: "Tbilisi", country: "Georgia", type: "HOME", label: "Home",
+      line1: "Rustaveli Ave 12", line2: "apt 4", entrance: 2, floor: 3, doorCode: "1234", coordinates: { lat: 41.7, lng: 44.8 },
+      components: [{ name: "Vake", kind: "district" }], isDefault: true,
+    },
+    pickupAddress: { id: 3, description: "Agrohub Vake", number: 12 },
+    location: { cityCode: "TBI", description: "near the park", position: { x: 41.7 } },
+    address: { line1: "Chavchavadze 5", cityCode: "TBI" },
+    addressId: 77,
+    store: { id: 5, name: "Agrohub" },
+  });
+  expect(out).toEqual({
+    deliveryAddress: {
+      id: 9, cityCode: "TBI", countryCode: "GE", cityName: "Tbilisi", city: "Tbilisi", country: "Georgia", type: "HOME", label: "Home",
+      line1: "[REDACTED]", line2: "[REDACTED]", entrance: "[REDACTED]", floor: "[REDACTED]", doorCode: "[REDACTED]", coordinates: "[REDACTED]",
+      components: [{ name: "[REDACTED]", kind: "[REDACTED]" }], isDefault: true,
+    },
+    pickupAddress: { id: 3, description: "[REDACTED]", number: "[REDACTED]" },
+    location: { cityCode: "TBI", description: "[REDACTED]", position: { x: "[REDACTED]" } },
+    address: { line1: "[REDACTED]", cityCode: "TBI" },
+    addressId: "[REDACTED]",
+    store: { id: 5, name: "Agrohub" },
+  } as unknown as typeof out);
+});
+
+test("a numeric phone value under a phone key is redacted whole", () => {
+  expect(redact({ contactPhone: { number: 599123456 } })).toEqual({ contactPhone: "[REDACTED]" } as never);
+});
+
+test("endpointTemplate replaces numeric path segments only", () => {
+  expect(endpointTemplate("https://api.glovoapp.com/v3/me")).toBe("/v3/me");
+  expect(endpointTemplate("https://api.glovoapp.com/v3/stores/45/addresses/1234/content?offset=0")).toBe("/v3/stores/{id}/addresses/{id}/content");
+  expect(endpointTemplate("https://api.glovoapp.com/v4/customers/orders/987")).toBe("/v4/customers/orders/{id}");
 });
