@@ -1,19 +1,30 @@
 import { test, expect } from "bun:test";
 import { normalizeName } from "../src/matching/normalize";
-import { scoreCandidate, THRESHOLDS } from "../src/matching/score";
-import { resolve, MemoryMatchCache } from "../src/matching/resolver";
+import { scoreCandidate, hasConflict, coversTarget, THRESHOLDS } from "../src/matching/score";
+import { resolve, MemoryMatchCache, type MatchResult } from "../src/matching/resolver";
 import { DazogeClient } from "../src/dazoge/client";
 import type { DazogeProduct, DazogeSearchPage } from "../src/dazoge/types";
 
 test("normalizeName extracts volume, weight, percent and lowercased tokens across scripts", () => {
-  expect(normalizeName("სანტე-რძე 2.5% 1ლ")).toEqual({ tokens: ["სანტე", "რძე"], volumeMl: 1000, weightG: null, percent: 2.5 });
-  expect(normalizeName("Sante Milk 2,5% 1 L")).toEqual({ tokens: ["სანტე", "რძე"], volumeMl: 1000, weightG: null, percent: 2.5 });
-  expect(normalizeName("ყველი ბრი /Milky Lux / 1კგ")).toEqual({ tokens: ["ყველი", "ბრი", "milky", "lux"], volumeMl: null, weightG: 1000, percent: null });
-  expect(normalizeName("PALMOLIVE Milk&Olive 90 გრ.")).toEqual({ tokens: ["palmolive", "რძე", "olive"], volumeMl: null, weightG: 90, percent: null });
-  expect(normalizeName("Eggs 10 pcs 500ml")).toEqual({ tokens: ["კვერცხი", "pcs"], volumeMl: 500, weightG: null, percent: null });
+  expect(normalizeName("სანტე-რძე 2.5% 1ლ")).toEqual({ tokens: ["სანტე", "რძე"], volumeMl: 1000, weightG: null, percent: 2.5, count: null });
+  expect(normalizeName("Sante Milk 2,5% 1 L")).toEqual({ tokens: ["სანტე", "რძე"], volumeMl: 1000, weightG: null, percent: 2.5, count: null });
+  expect(normalizeName("ყველი ბრი /Milky Lux / 1კგ")).toEqual({ tokens: ["ყველი", "ბრი", "milky", "lux"], volumeMl: null, weightG: 1000, percent: null, count: null });
+  expect(normalizeName("PALMOLIVE Milk&Olive 90 გრ.")).toEqual({ tokens: ["palmolive", "რძე", "olive"], volumeMl: null, weightG: 90, percent: null, count: null });
+  expect(normalizeName("Eggs 10 pcs 500ml")).toEqual({ tokens: ["კვერცხი"], volumeMl: 500, weightG: null, percent: null, count: 10 });
   // A number followed by a word is not a quantity. Dazoge's own parser read "5152 ლ" out of this sponge's name.
   expect(normalizeName("აბაზანის ღრუბელი გრძელი 5152 ლიონესი - Lionesse").volumeMl).toBeNull();
   expect(normalizeName("Bread 7 grains 500g").weightG).toBe(500);
+});
+
+test("normalizeName multiplies packs into the quantity and parses piece counts", () => {
+  expect(normalizeName("Water 6 x 0.5L")).toEqual({ tokens: ["წყალი"], volumeMl: 3000, weightG: null, percent: null, count: null });
+  expect(normalizeName("წყალი 6x0.5ლ")).toEqual({ tokens: ["წყალი"], volumeMl: 3000, weightG: null, percent: null, count: null });
+  expect(normalizeName("Juice 2×1L").volumeMl).toBe(2000);
+  expect(normalizeName("Snickers 4x50g").weightG).toBe(200);
+  expect(normalizeName("აროიდ-ქოქოსის რძე 400მლ - 2 ცალი")).toEqual({ tokens: ["აროიდ", "ქოქოსის", "რძე"], volumeMl: 400, weightG: null, percent: null, count: 2 });
+  expect(normalizeName("კვერცხი 10 ც")).toEqual({ tokens: ["კვერცხი"], volumeMl: null, weightG: null, percent: null, count: 10 });
+  expect(normalizeName("Eggs 2 x 10 pcs").count).toBe(20); // a multiplier with no volume or weight multiplies the count
+  expect(normalizeName("კვერცხი (ცალი)").tokens).toEqual(["კვერცხი"]); // sold per piece: the unit word is not a token
 });
 
 test("scoreCandidate rewards token overlap and matching quantities", () => {
@@ -31,6 +42,19 @@ test("scoreCandidate treats quantities within 5% as equal and a different pack s
   const a = normalizeName("Sante Milk 2.5% 1L");
   expect(scoreCandidate(a, normalizeName("სანტე-რძე 2.5% 970მლ"))).toBe(1);
   expect(scoreCandidate(a, normalizeName("სანტე-რძე 2.5% 900მლ"))).toBeCloseTo(0.75, 10);
+});
+
+test("hasConflict needs both sides known and different; coversTarget needs every target token", () => {
+  const milk = normalizeName("Sante Milk 2.5% 1L");
+  expect(hasConflict(milk, normalizeName("სანტე-რძე 3.2% 1ლ"))).toBe(true); // percent
+  expect(hasConflict(milk, normalizeName("სანტე-რძე 2.5% 2ლ"))).toBe(true); // volume
+  expect(hasConflict(normalizeName("Eggs 10 pcs"), normalizeName("კვერცხი 30 ც"))).toBe(true); // count
+  expect(hasConflict(milk, normalizeName("სანტე-რძე 1ლ"))).toBe(false); // percent unknown on one side
+  expect(hasConflict(milk, normalizeName("სანტე-რძე 2.5% 970მლ"))).toBe(false); // within 5%
+  expect(hasConflict(normalizeName("Yogurt 0% 400g"), normalizeName("იოგურტი 0% 400გ"))).toBe(false); // 0% equals 0%
+  expect(coversTarget(milk, normalizeName("სანტე ულტრაპასტერიზებული რძე 2.5% 1ლ"))).toBe(true);
+  expect(coversTarget(normalizeName("Sante Strawberry Yogurt 2.5% 400g"), normalizeName("სანტე იოგურტი 2.5% 400გ"))).toBe(false);
+  expect(coversTarget(normalizeName("1L"), normalizeName("რძე 1ლ"))).toBe(false); // no target tokens
 });
 
 const product = (id: string, name: string): DazogeProduct => ({ id, name, volume: "", imageUrl: "", prices: [] });
@@ -102,6 +126,7 @@ test("resolve accepts a lone candidate at accept or above, counting per-store du
   expect(r.status).toBe("matched");
   if (r.status === "matched") { expect(r.dazogeId).toBe("u"); expect(r.confidence).toBeCloseTo(0.8, 10); expect(r.via).toBe("name"); }
   expect(cache.get("g6")?.dazogeId).toBe("u");
+  expect(cache.get("g6")?.confidence).toBe(0.8); // rounded to 3 decimals, not 0.7999999999999999
 });
 
 test("resolve leaves a lone candidate below accept ambiguous, drops junk below consider, and caches nothing", async () => {
@@ -131,4 +156,74 @@ test("resolve on recorded Dazoge pages: Georgian milk results match, cosmetics f
   expect(rdze).toEqual({ status: "matched", dazogeId: "4860051001298", confidence: 1, via: "name" });
   const milk = await resolve(glovo, { dazoge: await fixtureClient("search-milk.json"), cache: new MemoryMatchCache() });
   expect(milk).toEqual({ status: "none" });
+});
+
+// Fix round 1: a known attribute conflict, an uncovered Glovo word or a differing pack never auto-accepts.
+
+const searchOnly = (items: Array<{ id: string; name: string }>) => ({ getProduct: async () => null, search: async () => page(items) });
+const flags = (r: MatchResult) =>
+  r.status === "ambiguous" ? r.candidates.map((c) => [c.dazogeId, c.conflict, c.covers]) : r;
+
+test("resolve does not auto-accept a lone candidate with the wrong fat percent", async () => {
+  const cache = new MemoryMatchCache();
+  const r = await resolve({ key: "c1", name: "Sante Milk 2.5% 1L" }, { dazoge: searchOnly([{ id: "f32", name: "სანტე-რძე 3.2% 1ლ" }]), cache });
+  expect(r).toEqual({ status: "ambiguous", candidates: [{ dazogeId: "f32", name: "სანტე-რძე 3.2% 1ლ", score: 0.85, conflict: true, covers: true }] });
+  expect(cache.get("c1")).toBeNull();
+});
+
+test("resolve does not let a wrong-fat candidate beat a correct long-named one", async () => {
+  const cache = new MemoryMatchCache();
+  const dazoge = searchOnly([
+    { id: "f32", name: "სანტე-რძე 3.2% 1ლ" }, // 0.85, conflicts on percent
+    { id: "loko", name: "სანტე ულტრაპასტერიზებული რძე ვიტამინებით ლოკო მოკო 2.5% 1 ლ" }, // 0.6: covers, no conflict, below accept
+  ]);
+  const r = await resolve({ key: "c2", name: "Sante Milk 2.5% 1L" }, { dazoge, cache });
+  expect(flags(r)).toEqual([["f32", true, true], ["loko", false, true]]);
+  expect(cache.get("c2")).toBeNull();
+});
+
+test("resolve does not auto-accept a lone candidate with the wrong pack size", async () => {
+  const cache = new MemoryMatchCache();
+  const r = await resolve({ key: "c3", name: "Sante Milk 2.5% 1L" }, { dazoge: searchOnly([{ id: "two", name: "სანტე-რძე 2.5% 2ლ" }]), cache });
+  expect(r).toEqual({ status: "ambiguous", candidates: [{ dazogeId: "two", name: "სანტე-რძე 2.5% 2ლ", score: 0.75, conflict: true, covers: true }] });
+  expect(cache.get("c3")).toBeNull();
+});
+
+test("resolve does not auto-accept a plainer variant that misses a Glovo word (strawberry is not aliased)", async () => {
+  const cache = new MemoryMatchCache();
+  const dazoge = searchOnly([
+    { id: "plain", name: "სანტე იოგურტი 2.5% 400გ" }, // 0.8
+    { id: "straw", name: "სანტე იოგურტი მარწყვის გემოთი 2.5% 400გ" }, // 0.64
+  ]);
+  const r = await resolve({ key: "c4", name: "Sante Strawberry Yogurt 2.5% 400g" }, { dazoge, cache });
+  expect(flags(r)).toEqual([["plain", false, false], ["straw", false, false]]);
+  expect(cache.get("c4")).toBeNull();
+});
+
+test("resolve treats a 6 x 0.5L pack as 3L: a single bottle conflicts, the matching pack is accepted", async () => {
+  const single = { id: "single", name: "წყალი 0.5ლ" };
+  const cache = new MemoryMatchCache();
+  const lone = await resolve({ key: "c5", name: "Water 6 x 0.5L" }, { dazoge: searchOnly([single]), cache });
+  expect(flags(lone)).toEqual([["single", true, true]]);
+  expect(cache.get("c5")).toBeNull();
+  const both = await resolve({ key: "c5", name: "Water 6 x 0.5L" }, { dazoge: searchOnly([single, { id: "pack", name: "წყალი 6x0.5ლ" }]), cache });
+  expect(both).toEqual({ status: "matched", dazogeId: "pack", confidence: 1, via: "name" });
+  expect(cache.get("c5")?.dazogeId).toBe("pack");
+});
+
+test("resolve blocks auto-accept when piece counts differ and accepts when they agree", async () => {
+  const glovo = { key: "c6", name: "Eggs 10 pcs" };
+  const thirty = await resolve(glovo, { dazoge: searchOnly([{ id: "e30", name: "კვერცხი 30 ც" }]), cache: new MemoryMatchCache() });
+  expect(flags(thirty)).toEqual([["e30", true, true]]);
+  const ten = await resolve(glovo, { dazoge: searchOnly([{ id: "e10", name: "კვერცხი 10 ც" }]), cache: new MemoryMatchCache() });
+  expect(ten).toEqual({ status: "matched", dazogeId: "e10", confidence: 1, via: "name" });
+});
+
+test("resolve counts a gap of exactly 0.1 as clear, despite floating point (0.7999999999999999 vs 0.7000000000000001)", async () => {
+  const dazoge = searchOnly([
+    { id: "u", name: "სანტე რძე ულტრაპასტერიზებული 2.5% 1ლ" }, // 0.8
+    { id: "lf", name: "სანტე რძე ულაქტოზო მსუბუქი 2.5% 1ლ" }, // 0.7
+  ]);
+  const r = await resolve({ key: "c7", name: "Sante Milk 2.5% 1L" }, { dazoge, cache: new MemoryMatchCache() });
+  expect(r).toEqual({ status: "matched", dazogeId: "u", confidence: 0.8, via: "name" });
 });
