@@ -194,6 +194,13 @@ test("tool descriptions state the units and pantry semantics Claude needs", asyn
   expect(desc.meals_plan_save).toMatch(/re-saving replaces planned meals in the same date and slot/i);
   expect(desc.meals_upcoming).toMatch(/today/);
   expect(desc.delivery_record).toMatch(/filed under productName/);
+  expect(desc.dazoge_search).toBe("Search Dazoge by product name. Use Georgian words for generic foods (e.g. 'რძე' for milk, " +
+    "'კვერცხი' for eggs); Latin works for brand names. Results include non-food items from pharmacies; ignore those. " +
+    "Returns one row per product per store with prices in tetri and GEL.");
+  expect(desc.price_basket).toContain("qty is the number of quoted packs (a 'chicken 800 g' pack is qty 1, not 800).");
+  expect(desc.price_basket).toContain("Store keys must match across basket quotes, stores and anchorStore; use Dazoge storeSlug values " +
+    "(agrohub, goodwill, carrefour, spar, ...).");
+  expect(desc.price_basket).toContain("Delivery fees and minimums are not known to this server yet; ask the user or use the last seen values.");
   expect(desc.pantry_adjust).toMatch(/floor at zero/);
   expect(desc.pantry_adjust).toContain("stored: false");
 });
@@ -246,4 +253,15 @@ test("meals_upcoming lists the plan ahead from today in Tbilisi, and a re-saved 
   expect(upcoming.map((m: { title: string }) => m.title)).toEqual(["Tomorrow"]);
   const recent = JSON.parse(textOf(await client.callTool({ name: "meals_recent", arguments: {} })));
   expect(recent.map((m: { title: string }) => m.title)).toContain("Yesterday");
+});
+
+test("price_basket rejects a zero unitPrice: 0 is not a price", async () => {
+  const client = await connectedClient(testDeps());
+  const res = await client.callTool({ name: "price_basket", arguments: {
+    basket: [{ key: "milk", name: "Milk", qty: 1, category: "dairy" }],
+    quotes: [{ itemKey: "milk", store: "agrohub", unitPrice: 0, source: "glovo" }],
+    stores: [{ store: "agrohub", deliveryFee: 500, minOrder: 1000 }],
+  } });
+  expect(res.isError).toBe(true);
+  expect(textOf(res)).toMatch(/unitPrice/);
 });

@@ -82,7 +82,9 @@ export function createServer(overrides: Partial<ServerDeps> = {}): McpServer {
   }));
 
   server.registerTool("dazoge_search", {
-    description: "Search Dazoge for products by name (Georgian or Latin). Returns one row per product per store.",
+    description: "Search Dazoge by product name. Use Georgian words for generic foods (e.g. 'რძე' for milk, 'კვერცხი' for eggs); " +
+      "Latin works for brand names. Results include non-food items from pharmacies; ignore those. " +
+      "Returns one row per product per store with prices in tetri and GEL.",
     inputSchema: { query: z.string().min(1), page: z.number().int().min(1).default(1) },
   }, guarded(async ({ query, page }) => {
     const r = await deps.dazoge.search(query, page);
@@ -173,10 +175,13 @@ export function createServer(overrides: Partial<ServerDeps> = {}): McpServer {
   server.registerTool("price_basket", {
     description: "Apply the store split rule to a basket. ALL money fields are integer tetri (1 GEL = 100 tetri): " +
       "quotes.unitPrice, stores.deliveryFee, stores.minOrder, marginTetri. " +
+      "qty is the number of quoted packs (a 'chicken 800 g' pack is qty 1, not 800). " +
+      "Store keys must match across basket quotes, stores and anchorStore; use Dazoge storeSlug values (agrohub, goodwill, carrefour, spar, ...). " +
+      "Delivery fees and minimums are not known to this server yet; ask the user or use the last seen values. " +
       "Returns one or two proposed carts with GEL-formatted totals and the savings versus buying everything at the anchor store.",
     inputSchema: {
       basket: z.array(z.object({ key: z.string(), name: z.string(), qty: z.number().positive(), category: CATEGORY })).min(1),
-      quotes: z.array(z.object({ itemKey: z.string(), store: z.string(), unitPrice: z.number().int().min(0), source: z.enum(["glovo", "dazoge"]) })),
+      quotes: z.array(z.object({ itemKey: z.string(), store: z.string(), unitPrice: z.number().int().positive(), source: z.enum(["glovo", "dazoge"]) })),
       stores: z.array(z.object({ store: z.string(), deliveryFee: z.number().int().min(0), minOrder: z.number().int().min(0) })).min(1),
       marginTetri: z.number().int().min(0).default(DEFAULT_SPLIT_CONFIG.marginTetri),
       protectedCategories: z.array(CATEGORY).default(DEFAULT_SPLIT_CONFIG.protectedCategories),
