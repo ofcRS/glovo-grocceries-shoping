@@ -41,3 +41,15 @@ export function parseAuthCookie(cookieValue: string): GlovoAuth | null {
 export function isExpiring(auth: GlovoAuth, nowSec: number, skewSec = 60): boolean {
   return auth.expiresAt - nowSec <= skewSec;
 }
+
+/**
+ * Picks the auth to use from a cookie value. Returns null when absent/unparseable,
+ * expired (exp <= nowSec), or still equal to `staleToken` (the token the server rejected).
+ */
+export function selectFreshAuth(cookieValue: string | undefined, staleToken: string | undefined, nowSec: number): GlovoAuth | null {
+  if (cookieValue === undefined) return null;
+  const auth = parseAuthCookie(cookieValue);
+  if (!auth || auth.expiresAt <= nowSec) return null;
+  if (staleToken !== undefined && auth.accessToken === staleToken) return null;
+  return auth;
+}

@@ -1,5 +1,5 @@
 import { test, expect } from "bun:test";
-import { parseAuthCookie, isExpiring } from "../src/glovo/auth";
+import { parseAuthCookie, isExpiring, selectFreshAuth } from "../src/glovo/auth";
 
 function jwtWith(payload: Record<string, unknown>): string {
   const b64 = (o: unknown) => Buffer.from(JSON.stringify(o)).toString("base64url");
@@ -33,4 +33,31 @@ test("isExpiring honours skew", () => {
   expect(isExpiring(auth, 950)).toBe(true);      // 50s left
   expect(isExpiring(auth, 1001)).toBe(true);
   expect(isExpiring(auth, 900, 200)).toBe(true);
+});
+
+const cookieFor = (token: string) => encodeURIComponent(JSON.stringify({ accessToken: token }));
+
+test("selectFreshAuth accepts a changed, unexpired token after a rejection", () => {
+  const fresh = jwtWith({ exp: 2000 });
+  expect(selectFreshAuth(cookieFor(fresh), "rejected-token", 1000)?.accessToken).toBe(fresh);
+});
+
+test("selectFreshAuth rejects the same token that was rejected, even if unexpired", () => {
+  const tok = jwtWith({ exp: 2000 });
+  expect(selectFreshAuth(cookieFor(tok), tok, 1000)).toBeNull();
+});
+
+test("selectFreshAuth rejects an expired token", () => {
+  expect(selectFreshAuth(cookieFor(jwtWith({ exp: 1000 })), undefined, 1000)).toBeNull(); // exp == now counts as expired
+  expect(selectFreshAuth(cookieFor(jwtWith({ exp: 999 })), "other-token", 1000)).toBeNull();
+});
+
+test("selectFreshAuth with no stale token accepts any unexpired token", () => {
+  const tok = jwtWith({ exp: 1001 });
+  expect(selectFreshAuth(cookieFor(tok), undefined, 1000)).toEqual({ accessToken: tok, expiresAt: 1001, userId: null });
+});
+
+test("selectFreshAuth returns null for a missing or unparseable cookie", () => {
+  expect(selectFreshAuth(undefined, undefined, 0)).toBeNull();
+  expect(selectFreshAuth("garbage", undefined, 0)).toBeNull();
 });

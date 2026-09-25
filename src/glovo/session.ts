@@ -1,11 +1,14 @@
 import { chromium, type BrowserContext, type Page } from "playwright";
-import { parseAuthCookie, isExpiring, type GlovoAuth } from "./auth";
+import { parseAuthCookie, selectFreshAuth, type GlovoAuth } from "./auth";
 import type { TokenProvider } from "./api";
 
-const HOME = "https://glovoapp.com/en/ge/tbilisi/";
+export const HOME = "https://glovoapp.com/en/ge/tbilisi/";
 const COOKIE = "glovo_auth_info";
+const COOKIE_URL = "https://glovoapp.com";
 
 export class GlovoSession implements TokenProvider {
+  private inflight: Promise<GlovoAuth | null> | null = null;
+
   private constructor(private readonly ctx: BrowserContext) {}
 
   static async launch(opts: { profileDir: string; headed?: boolean }): Promise<GlovoSession> {
@@ -19,34 +22,48 @@ export class GlovoSession implements TokenProvider {
     return new GlovoSession(ctx);
   }
 
+  /** Pure read of the auth cookie. No refresh, no page load; callers decide what to do with an expired token. */
   async getAuth(): Promise<GlovoAuth | null> {
-    const cookies = await this.ctx.cookies("https://glovoapp.com");
-    const c = cookies.find((k) => k.name === COOKIE);
-    if (!c) return null;
-    const auth = parseAuthCookie(c.value);
-    if (!auth) return null;
-    if (isExpiring(auth, Math.floor(Date.now() / 1000))) return this.refresh();
-    return auth;
+    const value = await this.readCookie();
+    return value === undefined ? null : parseAuthCookie(value);
   }
 
-  /** Load the home page so the web app trades its refresh token for a new access token. */
-  async refresh(): Promise<GlovoAuth | null> {
+  /**
+   * Load the home page so the web app trades its refresh credential for a new access token.
+   * Single-flight: concurrent callers share one page load (and the first caller's `staleToken`).
+   */
+  refresh(staleToken?: string): Promise<GlovoAuth | null> {
+    if (this.inflight) return this.inflight;
+    const flight: Promise<GlovoAuth | null> = this.doRefresh(staleToken).finally(() => {
+      if (this.inflight === flight) this.inflight = null;
+    });
+    this.inflight = flight;
+    return flight;
+  }
+
+  private async doRefresh(staleToken: string | undefined): Promise<GlovoAuth | null> {
     const page = await this.ctx.newPage();
     try {
-      await page.goto(HOME, { waitUntil: "networkidle", timeout: 30_000 });
-      const before = Date.now();
-      // Poll up to 10s for a non-expiring cookie.
-      while (Date.now() - before < 10_000) {
-        const cookies = await this.ctx.cookies("https://glovoapp.com");
-        const c = cookies.find((k) => k.name === COOKIE);
-        const auth = c ? parseAuthCookie(c.value) : null;
-        if (auth && !isExpiring(auth, Math.floor(Date.now() / 1000))) return auth;
-        await page.waitForTimeout(500);
+      try {
+        await page.goto(HOME, { waitUntil: "domcontentloaded", timeout: 20_000 });
+      } catch {
+        /* a slow or failed navigation may still have re-minted the token: fall through to the poll */
       }
-      return null;
+      const deadline = Date.now() + 10_000;
+      for (;;) {
+        const auth = selectFreshAuth(await this.readCookie(), staleToken, Math.floor(Date.now() / 1000));
+        if (auth) return auth;
+        if (Date.now() >= deadline) return null;
+        await Bun.sleep(500);
+      }
     } finally {
-      await page.close();
+      await page.close().catch(() => { /* never mask the refresh result */ });
     }
+  }
+
+  private async readCookie(): Promise<string | undefined> {
+    const cookies = await this.ctx.cookies(COOKIE_URL);
+    return cookies.find((c) => c.name === COOKIE)?.value;
   }
 
   newPage(): Promise<Page> {

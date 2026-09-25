@@ -2,7 +2,8 @@ import type { GlovoAuth } from "./auth";
 
 export interface TokenProvider {
   getAuth(): Promise<GlovoAuth | null>;
-  refresh(): Promise<GlovoAuth | null>;
+  /** Obtain a new access token. `staleToken` is the token to move past (rejected or expired), if any. */
+  refresh(staleToken?: string): Promise<GlovoAuth | null>;
 }
 
 export const GLOVO_HEADERS: Record<string, string> = {
@@ -16,7 +17,7 @@ export const GLOVO_HEADERS: Record<string, string> = {
 export class GlovoApiError extends Error {
   constructor(
     public readonly status: number,
-    public readonly kind: "needs_login" | "http" | "network",
+    public readonly kind: "needs_login" | "http" | "network" | "browser",
     message: string,
   ) {
     super(message);
@@ -26,6 +27,8 @@ export class GlovoApiError extends Error {
 
 export interface GlovoMe { id: number; name: string; deliveredOrdersCount: number; preferredCityCode: string }
 
+const nowSec = () => Math.floor(Date.now() / 1000);
+
 export class GlovoApi {
   constructor(
     private readonly tokens: TokenProvider,
@@ -33,19 +36,43 @@ export class GlovoApi {
     private readonly base = "https://api.glovoapp.com",
   ) {}
 
+  /** GET with a budget of one token refresh per call (pre-flight for a missing/expired token, or after a 401). */
   async get<T>(path: string): Promise<T> {
-    let auth = await this.tokens.getAuth();
-    if (!auth) throw new GlovoApiError(401, "needs_login", "No Glovo session. Run `bun run login`.");
+    let refreshed = false;
+    let auth = await this.provider(() => this.tokens.getAuth());
+
+    if (!auth || auth.expiresAt <= nowSec()) {
+      const stale = auth?.accessToken;
+      auth = await this.provider(() => this.tokens.refresh(stale));
+      refreshed = true;
+      if (!auth) {
+        throw new GlovoApiError(401, "needs_login", stale === undefined
+          ? "No Glovo session. Run `bun run login`."
+          : "Glovo session expired. Run `bun run login`.");
+      }
+    }
 
     let res = await this.send(path, auth);
     if (res.status === 401) {
-      auth = await this.tokens.refresh();
+      if (refreshed) throw new GlovoApiError(401, "needs_login", "Glovo rejected a refreshed token. Run `bun run login`.");
+      const rejected = auth.accessToken;
+      auth = await this.provider(() => this.tokens.refresh(rejected));
       if (!auth) throw new GlovoApiError(401, "needs_login", "Glovo session expired. Run `bun run login`.");
       res = await this.send(path, auth);
       if (res.status === 401) throw new GlovoApiError(401, "needs_login", "Glovo rejected a refreshed token. Run `bun run login`.");
     }
     if (!res.ok) throw new GlovoApiError(res.status, "http", `Glovo GET ${path}: HTTP ${res.status}`);
     return (await res.json()) as T;
+  }
+
+  /** Token provider calls drive a browser; any failure there surfaces as kind "browser". */
+  private async provider(call: () => Promise<GlovoAuth | null>): Promise<GlovoAuth | null> {
+    try {
+      return await call();
+    } catch (e) {
+      if (e instanceof GlovoApiError) throw e;
+      throw new GlovoApiError(0, "browser", `Glovo browser session: ${(e as Error).message}`);
+    }
   }
 
   private async send(path: string, auth: GlovoAuth): Promise<Response> {
