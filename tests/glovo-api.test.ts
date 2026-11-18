@@ -22,7 +22,7 @@ function provider(tokens: (GlovoAuth | null)[]) {
   };
 }
 
-function fetchSeq(responses: Array<{ status: number; body?: unknown; expectToken?: string }>): { f: typeof fetch; seen: Request[] } {
+function fetchSeq(responses: Array<{ status: number; body?: unknown; raw?: string; headers?: Record<string, string>; expectToken?: string }>): { f: typeof fetch; seen: Request[] } {
   const seen: Request[] = [];
   let n = 0;
   const f = (async (input: RequestInfo | URL, init?: RequestInit) => {
@@ -32,8 +32,9 @@ function fetchSeq(responses: Array<{ status: number; body?: unknown; expectToken
     if (r.expectToken !== undefined && req.headers.get("authorization") !== r.expectToken) {
       return new Response("bad token", { status: 401 });
     }
-    return new Response(r.body === undefined ? "" : JSON.stringify(r.body), {
-      status: r.status, headers: { "content-type": "application/json" },
+    const body = r.status === 204 ? null : r.raw ?? (r.body === undefined ? "" : JSON.stringify(r.body));
+    return new Response(body, {
+      status: r.status, headers: { "content-type": "application/json", ...r.headers },
     });
   }) as typeof fetch;
   return { f, seen };
@@ -176,4 +177,43 @@ test("me() maps the profile fields", async () => {
   const p = provider([auth("a")]);
   const { f } = fetchSeq([{ status: 200, body: { id: 1, name: "A", deliveredOrdersCount: 33, preferredCityCode: "TBI", extra: 1 } }]);
   expect(await new GlovoApi(p, f).me()).toEqual({ id: 1, name: "A", deliveredOrdersCount: 33, preferredCityCode: "TBI" });
+});
+
+test("keeps int64 ids above 2^53 exact, as strings", async () => {
+  const { f } = fetchSeq([{ status: 200, raw: `{"id":4611686018428144035,"ids":[4611686018469291378],"price":6.3,"qty":12,"neg":-9007199254740993}` }]);
+  const body = await new GlovoApi(provider([auth("a")]), f).get<Record<string, unknown>>("/v3/stores/1/search");
+  expect(body).toEqual({ id: "4611686018428144035", ids: ["4611686018469291378"], price: 6.3, qty: 12, neg: "-9007199254740993" });
+});
+
+test("204 No Content returns null", async () => {
+  const { f } = fetchSeq([{ status: 204 }]);
+  expect(await new GlovoApi(provider([auth("a")]), f).get<unknown>("/v1/authenticated/customers/1/baskets/stores/2")).toBeNull();
+});
+
+test("on 429 waits and retries the same request", async () => {
+  const waits: number[] = [];
+  const { f, seen } = fetchSeq([{ status: 429 }, { status: 200, body: { ok: true } }]);
+  const api = new GlovoApi(provider([auth("a")]), f, undefined, async (ms) => { waits.push(ms); });
+  expect(await api.get<unknown>("/v3/stores/1/search")).toEqual({ ok: true });
+  expect(seen.length).toBe(2);
+  expect(waits.length).toBe(1);
+});
+
+test("on 429 honours Retry-After seconds", async () => {
+  const waits: number[] = [];
+  const { f } = fetchSeq([{ status: 429, headers: { "retry-after": "5" } }, { status: 200, body: {} }]);
+  await new GlovoApi(provider([auth("a")]), f, undefined, async (ms) => { waits.push(ms); }).get<unknown>("/x");
+  expect(waits).toStrictEqual([5000]);
+});
+
+test("gives up after three 429 retries with a rate-limit http error", async () => {
+  const waits: number[] = [];
+  const { f, seen } = fetchSeq([{ status: 429 }]);
+  const err = await new GlovoApi(provider([auth("a")]), f, undefined, async (ms) => { waits.push(ms); }).get("/x").catch((e) => e);
+  expect(err).toBeInstanceOf(GlovoApiError);
+  expect((err as GlovoApiError).kind).toBe("http");
+  expect((err as GlovoApiError).status).toBe(429);
+  expect((err as GlovoApiError).message).toContain("rate limit");
+  expect(seen.length).toBe(4);
+  expect(waits.length).toBe(3);
 });
