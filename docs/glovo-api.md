@@ -33,6 +33,11 @@ not in the fixtures. Nothing here was placed as an order: the walk stopped at th
   started refusing everything mid-loop, see rate limits below. The profile keeps the real
   ids: cookies `glv_perseus_client` and `glv_perseus_session`, local storage `glv_device`
   and `glv_uuid`; Plan 2 should read and reuse them rather than invent ids.
+- Replaying captured browser headers through Playwright's request context (observed
+  2026-11): forwarding `accept-encoding` got `zstd` bodies that the context could not decode,
+  so JSON came back empty. Drop `accept-encoding`, the HTTP/2 `:` pseudo-headers, `host`,
+  `content-length` and `cookie` before replaying. The context sends the profile's cookies
+  itself. The store-view endpoints also answered `429` to bursts; one call every 1.2 s held.
 - Rate limits: about thirty search requests within a minute, each with a different
   device id, produced `429` on every catalog call afterwards. Cache search results, send one
   stable identity, and space requests out.
@@ -136,6 +141,30 @@ not in the fixtures. Nothing here was placed as an order: the walk stopped at th
 
 ## Basket
 
+> **Update, observed 2026-11-05 to 2026-11-16 (live use, no new fixtures).**
+>
+> - Replaying the create call below (`POST /v1/authenticated/customers/{customerId}/baskets`)
+>   from Playwright's request context answered `403 Forbidden`. That held with the
+>   browser's full header set, a fresh `glovo-request-id`, and `origin`/`referer` added.
+>   The same call from inside the page (`fetch` in the page) failed on CORS.
+> - The web app's own cart writes now go to `PUT /v2/baskets/{basketId}`, which answered
+>   `201`. Its request body has not been recorded yet. Record it, with the recorder attached,
+>   before implementing cart writes.
+> - The v1 `PUT .../products` and `PATCH .../products/quantity` calls below were not retried.
+>   Treat them as unverified.
+> - Until the v2 body is recorded, fill carts by driving the store page:
+>   1. Search for the product.
+>   2. Click the last button on the product tile to add one.
+>   3. To lower the quantity, click `Decrease quantity`. At quantity 1 that button is
+>      `Remove item` instead.
+>   4. Re-read the basket with the `GET` below after every click, so a re-run sets a target
+>      quantity instead of adding again.
+> - The basket `GET` still works as documented.
+> - **Totals.** `basketPrice.total` is the price before promotions; `basketPrice.final` is
+>   what checkout charges. Line `price.final` is the discounted line price. Example from a
+>   Carrefour basket on 2026-11-16: `total` 134,85 GEL, `final` 123,74 GEL. Show and compare
+>   `final`.
+
 Paths use the customer id from `/v3/me`. A basket id looks like
 `<customerId>_<storeId>_<uuid>`. Every write returns the full basket and a new
 `basketVersion` (uuid), which the next write must send back: it is optimistic concurrency.
@@ -146,7 +175,8 @@ Paths use the customer id from `/v3/me`. A basket id looks like
   `basket-get.json`): `basketId`, `basketVersion`, `products[]` with
   `ids { basketProductId, id, externalId, storeProductId }`, `quantity.items`, `price`
   (`unitaryBasePrice.minor` is tetri), `name`, `eans`, `weight { value, unit }`,
-  `availability`, and `basketPrice.total.minor` (tetri).
+  `availability`, `basketPrice.total.minor` (tetri, before promotions) and
+  `basketPrice.final.minor` (tetri, after promotions).
 - Create, when the store has no basket yet:
   `POST /v1/authenticated/customers/{customerId}/baskets` (fixture `basket-create.json`)
   body:
