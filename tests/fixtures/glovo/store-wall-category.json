@@ -1,0 +1,239 @@
+{
+  "method": "POST",
+  "url": "https://api.glovoapp.com/v1/web/store_wall/category/22?moduleId=StoreFeeds&offset=50&limit=50&handlingType=DELIVERY",
+  "endpoint": "/v1/web/store_wall/category/{id}",
+  "status": 200,
+  "contentType": "application/json",
+  "requestHeaders": {
+    "accept": "application/json, text/plain, */*",
+    "accept-language": "en",
+    "authorization": "[REDACTED]",
+    "content-length": "482",
+    "content-type": "application/json",
+    "glovo-api-version": "14",
+    "glovo-app-context": "web",
+    "glovo-app-development-state": "prod",
+    "glovo-app-platform": "web",
+    "glovo-app-type": "customer",
+    "glovo-device-urn": "[REDACTED]",
+    "glovo-dynamic-session-id": "[REDACTED]",
+    "glovo-language-code": "en",
+    "glovo-location-city-code": "TBI",
+    "glovo-location-country-code": "GE",
+    "origin": "https://glovoapp.com",
+    "referer": "https://glovoapp.com/"
+  },
+  "requestBody": {
+    "filters": [],
+    "previousStoreIds": [
+      "301995",
+      "454741",
+      "392597"
+    ]
+  },
+  "responseBody": {
+    "data": {
+      "category": {
+        "categoryId": 22,
+        "title": "Shops"
+      },
+      "stores": {
+        "entries": [
+          {
+            "id": "609063",
+            "image": {
+              "lightImage": "dh:stores-glovo/stores/ad74b23a5fc85e10e4122a2287778d02c928f662459910d88f2c8d9256b3f907",
+              "darkImage": "dh:stores-glovo/stores/ad74b23a5fc85e10e4122a2287778d02c928f662459910d88f2c8d9256b3f907"
+            },
+            "logo": {
+              "lightImage": "dh:customer-assets-glovo/store_logos/9f4cc1298d76d1fe09c87546408db5b929fb7d753ef1e6d61bad28a07ebe3b68",
+              "darkImage": "dh:customer-assets-glovo/store_logos/9f4cc1298d76d1fe09c87546408db5b929fb7d753ef1e6d61bad28a07ebe3b68"
+            },
+            "promotions": [],
+            "ratings": {
+              "score": "New",
+              "votes": "",
+              "icon": {
+                "lightImage": "dh:customer-assets-glovo/feed/tags/cornet.png",
+                "darkImage": "dh:customer-assets-glovo/feed/tags/cornet_dark.png"
+              }
+            },
+            "tag": "Fashion",
+            "eta": "20-35 min",
+            "distance": "700m",
+            "deliveryFee": {
+              "baseFee": "1,49₾",
+              "effectiveFee": "Free",
+              "icon": {
+                "lightImage": "dh:customer-assets-glovo/StoreWall/NewStoreWall/storeCard/freeDeliveryPrimeLight.png",
+                "darkImage": "dh:customer-assets-glovo/StoreWall/NewStoreWall/storeCard/freeDeliveryPrimeDark.png"
+              },
+              "isPrimeDeliveryFee": true,
+              "isFreeDeliveryFee": true,
+              "isDiscountedDeliveryFee": false,
+              "isSurged": false
+            },
+            "title": "Mr.Goods",
+            "availability": {
+              "status": "CLOSED",
+              "description": "Closed"
+            },
+            "slug": "mr-goods-tbi",
+            "isTopRated": false,
+            "isFavorite": false,
+            "isNew": true,
+            "inStorePrices": {
+              "hasInStorePrices": false
+            },
+            "sponsored": {
+              "isSponsored": false
+            },
+            "metadata": {
+              "promoIds": [
+                "-1"
+              ],
+              "storeAddressId": 973088,
+              "shopRankPosition": 0,
+              "rankingType": "Hyperlocal",
+              "shopSponsoringPlacement": "shop_list:list",
+              "isSurgeActivated": false,
+              "deliveryFee": 1.49,
+              "deliveryFeeCurrency": "GEL"
+            }
+          },
+          {
+            "id": "464191",
+            "image": {
+              "lightImage": "dh:stores-glovo/stores/a7b791da4cbabd4d7c94ff391d1041f0a121ba550d6b86ac9b930d2faf8021ab",
+              "darkImage": "dh:stores-glovo/stores/a7b791da4cbabd4d7c94ff391d1041f0a121ba550d6b86ac9b930d2faf8021ab"
+            },
+            "logo": {
+              "lightImage": "dh:customer-assets-glovo/store_logos/a7c66587484b3d5ad35da5f7352f449d391c0e95a2cf9077b896a6198d7e2ea0",
+              "darkImage": "dh:customer-assets-glovo/store_logos/a7c66587484b3d5ad35da5f7352f449d391c0e95a2cf9077b896a6198d7e2ea0"
+            },
+            "promotions": [],
+            "ratings": {
+              "score": "--",
+              "votes": "",
+              "icon": {
+                "lightImage": "dh:customer-assets-glovo/store_ratings/rating_regular.png",
+                "darkImage": "dh:customer-assets-glovo/store_ratings/rating_regular_dark_icon.png"
+              }
+            },
+            "tag": "Beauty",
+            "eta": "25-40 min",
+            "distance": "2.1km",
+            "deliveryFee": {
+              "baseFee": "3,49₾",
+              "effectiveFee": "Free",
+              "icon": {
+                "lightImage": "dh:customer-assets-glovo/StoreWall/NewStoreWall/storeCard/freeDeliveryPrimeLight.png",
+                "darkImage": "dh:customer-assets-glovo/StoreWall/NewStoreWall/storeCard/freeDeliveryPrimeDark.png"
+              },
+              "isPrimeDeliveryFee": true,
+              "isFreeDeliveryFee": true,
+              "isDiscountedDeliveryFee": false,
+              "isSurged": false
+            },
+            "title": "GPC Beauty",
+            "availability": {
+              "status": "CLOSED",
+              "description": "Closed"
+            },
+            "slug": "gpc-virtual-beauty",
+            "isTopRated": false,
+            "isFavorite": false,
+            "isNew": false,
+            "inStorePrices": {
+              "hasInStorePrices": false
+            },
+            "sponsored": {
+              "isSponsored": false
+            },
+            "metadata": {
+              "promoIds": [
+                "-1"
+              ],
+              "storeAddressId": 739327,
+              "shopRankPosition": 1,
+              "rankingType": "Hyperlocal",
+              "shopSponsoringPlacement": "shop_list:list",
+              "isSurgeActivated": false,
+              "deliveryFee": 3.49,
+              "deliveryFeeCurrency": "GEL"
+            }
+          },
+          {
+            "id": "542234",
+            "image": {
+              "lightImage": "dh:stores-glovo/stores/b4f359f651013e3b7641e2c0b543ae076006e8a40feaf261a09eafb32f257458",
+              "darkImage": "dh:stores-glovo/stores/b4f359f651013e3b7641e2c0b543ae076006e8a40feaf261a09eafb32f257458"
+            },
+            "logo": {
+              "lightImage": "dh:customer-assets-glovo/store_logos/ec442c466ac45ce7a81bb24e3963c633778d54ca1fa4f0d51d670fafe428544b",
+              "darkImage": "dh:customer-assets-glovo/store_logos/ec442c466ac45ce7a81bb24e3963c633778d54ca1fa4f0d51d670fafe428544b"
+            },
+            "promotions": [],
+            "ratings": {
+              "score": "--",
+              "votes": "",
+              "icon": {
+                "lightImage": "dh:customer-assets-glovo/store_ratings/rating_regular.png",
+                "darkImage": "dh:customer-assets-glovo/store_ratings/rating_regular_dark_icon.png"
+              }
+            },
+            "tag": "Flowers",
+            "eta": "25-40 min",
+            "distance": "2.5km",
+            "deliveryFee": {
+              "baseFee": "3,49₾",
+              "effectiveFee": "Free",
+              "icon": {
+                "lightImage": "dh:customer-assets-glovo/StoreWall/NewStoreWall/storeCard/freeDeliveryPrimeLight.png",
+                "darkImage": "dh:customer-assets-glovo/StoreWall/NewStoreWall/storeCard/freeDeliveryPrimeDark.png"
+              },
+              "isPrimeDeliveryFee": true,
+              "isFreeDeliveryFee": true,
+              "isDiscountedDeliveryFee": false,
+              "isSurged": false
+            },
+            "title": "Amaryllis - Flowers & Gifts",
+            "availability": {
+              "status": "CLOSED",
+              "description": "Closed"
+            },
+            "slug": "amaryllis-tbi",
+            "isTopRated": false,
+            "isFavorite": false,
+            "isNew": false,
+            "inStorePrices": {
+              "hasInStorePrices": false
+            },
+            "sponsored": {
+              "isSponsored": false
+            },
+            "metadata": {
+              "promoIds": [
+                "-1"
+              ],
+              "storeAddressId": 878595,
+              "shopRankPosition": 2,
+              "rankingType": "Hyperlocal",
+              "shopSponsoringPlacement": "shop_list:list",
+              "isSurgeActivated": false,
+              "deliveryFee": 3.49,
+              "deliveryFeeCurrency": "GEL"
+            }
+          }
+        ],
+        "pagination": {
+          "limit": 50,
+          "moduleId": "StoreFeeds",
+          "offset": 50,
+          "totalEntries": 96
+        }
+      },
+      "widgets": []
+    }
+  }
+}

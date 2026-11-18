@@ -1,0 +1,5 @@
+{
+  "mcpServers": {
+    "grocery": { "command": "bun", "args": ["run", "src/server.ts"] }
+  }
+}

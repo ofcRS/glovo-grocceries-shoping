@@ -1,0 +1,291 @@
+{
+  "method": "GET",
+  "url": "https://api.glovoapp.com/v3/customer/orders/101000000001",
+  "endpoint": "/v3/customer/orders/{id}",
+  "status": 200,
+  "contentType": "application/json",
+  "requestHeaders": {
+    "accept": "application/json, text/plain, */*",
+    "accept-language": "en",
+    "authorization": "[REDACTED]",
+    "glovo-api-version": "14",
+    "glovo-app-context": "web",
+    "glovo-app-development-state": "prod",
+    "glovo-app-platform": "web",
+    "glovo-app-type": "customer",
+    "glovo-device-urn": "[REDACTED]",
+    "glovo-dynamic-session-id": "[REDACTED]",
+    "glovo-language-code": "en",
+    "glovo-location-city-code": "TBI",
+    "glovo-location-country-code": "GE",
+    "origin": "https://glovoapp.com",
+    "referer": "https://glovoapp.com/"
+  },
+  "requestBody": null,
+  "responseBody": {
+    "id": 101000000001,
+    "urn": "glv:purchase:78318a83-56c0-43ee-9c7c-42e214b949e2",
+    "code": "101000000001",
+    "description": "1 x მწვანე სალათი/ჰერბია/ 150გრ\n1 x ღორის ანტრიკოტი (აგროჰაბი) / 500 გრ\n1 x ძეხვი მონადირული /აგროჰაბი/ / 500 გრ\n1 x წიწაკა წითელი დაფქული/ოჯახური/ 50გ\n1 x სანელებელი ხორციანი კერძებისთვის /ოჯახური/ 50გ\n1 x შებოლილი პაპრიკა /ოჯახური/ 40გ\n2 x გაზიანი სასმელი ზერო /კოკა-კოლა/500მლ\n1 x სპეც ჩურჩხელა რქაწითელით\n1 x ატამი ქართული / 500 გრ\n1 x ვაშლატამა ყვითელი ქართული / 500 გრ\n1 x მსხალი კარმენი ქართული / 500 გრ\n2 x თინუსის ფილე ზეთში/ ჰენრის ქიჩენი/140გ",
+    "shortSummary": "14 products from <b>Agrohub</b>",
+    "creationTime": null,
+    "scheduledTime": null,
+    "scheduledTimeEnd": null,
+    "currentStatus": {
+      "urn": null,
+      "creationTime": 1790187654000,
+      "type": "DeliveredStatus",
+      "name": null,
+      "imageId": null
+    },
+    "cityCode": null,
+    "storeId": 169869,
+    "storeName": "Agrohub",
+    "storeSlug": "agrohubtbi",
+    "storeAddressId": 595140,
+    "imageId": "dh:stores-glovo/stores/e50573f5fbfa309492c3fe8d34ca8bd73dd9d9bf3492ff8b21970b5ca3407ffe",
+    "storeTrackingCode": null,
+    "handlingStrategy": {
+      "type": "DELIVERY",
+      "pickupData": null,
+      "inStoreData": null
+    },
+    "partnershipType": "GEN2",
+    "storeCategoryGroupIcon": null,
+    "courier": "[REDACTED]",
+    "points": [
+      {
+        "urn": "urn",
+        "creationTime": null,
+        "passed": null,
+        "type": "PICKUP",
+        "index": null,
+        "address": {
+          "urn": null,
+          "latitude": "[REDACTED]",
+          "longitude": "[REDACTED]",
+          "label": "[REDACTED]",
+          "details": null,
+          "instructions": null,
+          "contactPhone": "[REDACTED]",
+          "contactName": null
+        },
+        "cityCode": null
+      },
+      {
+        "urn": "urn",
+        "creationTime": null,
+        "passed": null,
+        "type": "DELIVERY",
+        "index": null,
+        "address": {
+          "urn": null,
+          "latitude": "[REDACTED]",
+          "longitude": "[REDACTED]",
+          "label": "[REDACTED]",
+          "details": "[REDACTED]",
+          "instructions": null,
+          "contactPhone": "[REDACTED]",
+          "contactName": null
+        },
+        "cityCode": null
+      }
+    ],
+    "attachments": [],
+    "selectedPaymentMethod": null,
+    "pricingBreakdown": {
+      "lines": [
+        {
+          "showDivider": false,
+          "isVerticalLayoutEnabled": false,
+          "type": "SERVICE",
+          "description": "Services",
+          "amount": "1,19₾",
+          "note": null,
+          "displayStyle": "DEFAULT",
+          "amountPrefix": null,
+          "finalAmount": null,
+          "tagInfo": null
+        },
+        {
+          "showDivider": false,
+          "isVerticalLayoutEnabled": false,
+          "type": "DELIVERY",
+          "description": "Prime Delivery",
+          "amount": "No cost",
+          "note": null,
+          "displayStyle": "DEFAULT",
+          "amountPrefix": null,
+          "finalAmount": null,
+          "tagInfo": null
+        },
+        {
+          "showDivider": false,
+          "isVerticalLayoutEnabled": false,
+          "type": "PRODUCTS",
+          "description": "Products",
+          "amount": "84,92₾",
+          "note": null,
+          "displayStyle": "DEFAULT",
+          "amountPrefix": null,
+          "finalAmount": null,
+          "tagInfo": null
+        }
+      ],
+      "comment": null
+    },
+    "voiceSuggestion": null,
+    "type": "SINGLE_ORDER",
+    "reorderData": {
+      "isAllowed": false,
+      "allowed": false
+    },
+    "isRemake": false,
+    "headerNotice": null,
+    "canGoToStore": false,
+    "paymentMethodsBreakdown": [
+      {
+        "text": "[REDACTED]",
+        "image": {
+          "lightImageId": "dh:customer-assets-glovo/CX/payment_methods/credit_card/mastercard-light.png",
+          "darkImageId": "dh:customer-assets-glovo/CX/payment_methods/credit_card/mastercard-dark.png"
+        },
+        "type": "CREDIT_CARD",
+        "provider": "MasterCard",
+        "amount": null
+      }
+    ],
+    "subtype": "PURCHASE",
+    "origin": "STORES",
+    "boughtProducts": [
+      {
+        "name": "ღორის ანტრიკოტი (აგროჰაბი) / 500 გრ",
+        "quantity": "1x",
+        "quantityDescription": null,
+        "customizationsDescription": "",
+        "icon": null,
+        "notice": null,
+        "packaging": null,
+        "price": "9,90₾",
+        "displayStyle": "DEFAULT",
+        "promotionDescription": null,
+        "promotionOrigin": null,
+        "originalPrice": null,
+        "freeProduct": false
+      },
+      {
+        "name": "სპეც ჩურჩხელა რქაწითელით",
+        "quantity": "1x",
+        "quantityDescription": null,
+        "customizationsDescription": "",
+        "icon": null,
+        "notice": null,
+        "packaging": null,
+        "price": "4,90₾",
+        "displayStyle": "DEFAULT",
+        "promotionDescription": null,
+        "promotionOrigin": null,
+        "originalPrice": null,
+        "freeProduct": false
+      },
+      {
+        "name": "მწვანე სალათი/ჰერბია/ 150გრ",
+        "quantity": "1x",
+        "quantityDescription": null,
+        "customizationsDescription": "",
+        "icon": null,
+        "notice": null,
+        "packaging": null,
+        "price": "5,95₾",
+        "displayStyle": "DEFAULT",
+        "promotionDescription": null,
+        "promotionOrigin": null,
+        "originalPrice": null,
+        "freeProduct": false
+      }
+    ],
+    "rateOrderAction": {
+      "label": "Rate your order",
+      "thumbsUpButton": {
+        "light": "https://glovo.dhmedia.io/image/customer-assets-glovo/ratings/rate-good-light.json",
+        "dark": "https://glovo.dhmedia.io/image/customer-assets-glovo/ratings/rate-good-dark.json"
+      },
+      "thumbsDownButton": {
+        "light": "https://glovo.dhmedia.io/image/customer-assets-glovo/ratings/rate-bad-light.json",
+        "dark": "https://glovo.dhmedia.io/image/customer-assets-glovo/ratings/rate-bad-dark.json"
+      },
+      "type": "THUMBS_UP_DOWN",
+      "subtitle": null,
+      "ctaLabel": null
+    },
+    "rating": null,
+    "helpButton": {
+      "text": "[REDACTED]",
+      "icon": {
+        "lightImageId": "dh:customer-assets-glovo/order_details/help_button-light.png",
+        "darkImageId": "dh:customer-assets-glovo/order_details/help_button-dark.png"
+      }
+    },
+    "disclaimer": null,
+    "footerDisclaimer": null,
+    "orderSplit": null,
+    "marketplace": null,
+    "orderModificationCues": [],
+    "storeInfo": null,
+    "recentlyCancelled": false,
+    "summaryBreakdown": [
+      {
+        "data": {
+          "showDivider": false,
+          "isVerticalLayoutEnabled": false,
+          "type": "SERVICE",
+          "description": "Services",
+          "amount": "1,19₾",
+          "note": null,
+          "displayStyle": "DEFAULT",
+          "amountPrefix": null,
+          "finalAmount": null,
+          "tagInfo": null
+        },
+        "type": "PRICING"
+      },
+      {
+        "data": {
+          "showDivider": false,
+          "isVerticalLayoutEnabled": false,
+          "type": "DELIVERY",
+          "description": "Prime Delivery",
+          "amount": "No cost",
+          "note": null,
+          "displayStyle": "DEFAULT",
+          "amountPrefix": null,
+          "finalAmount": null,
+          "tagInfo": null
+        },
+        "type": "PRICING"
+      },
+      {
+        "data": {
+          "showDivider": false,
+          "isVerticalLayoutEnabled": false,
+          "type": "PRODUCTS",
+          "description": "Products",
+          "amount": "84,92₾",
+          "note": null,
+          "displayStyle": "DEFAULT",
+          "amountPrefix": null,
+          "finalAmount": null,
+          "tagInfo": null
+        },
+        "type": "PRICING"
+      }
+    ],
+    "cancelAllowed": false,
+    "refunded": false,
+    "vertical": "Q_COMMERCE",
+    "isNewOrderTrackingEnabled": false,
+    "storeClickedEvent": null,
+    "invoiceButtons": [],
+    "review": null
+  }
+}

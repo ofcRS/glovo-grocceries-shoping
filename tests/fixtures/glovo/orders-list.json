@@ -1,0 +1,119 @@
+{
+  "method": "GET",
+  "url": "https://api.glovoapp.com/v3/customer/orders-list?offset=0&limit=12",
+  "endpoint": "/v3/customer/orders-list",
+  "status": 200,
+  "contentType": "application/json",
+  "requestHeaders": {
+    "accept": "application/json, text/plain, */*",
+    "accept-language": "en",
+    "authorization": "[REDACTED]",
+    "glovo-api-version": "14",
+    "glovo-app-context": "web",
+    "glovo-app-development-state": "prod",
+    "glovo-app-platform": "web",
+    "glovo-app-type": "customer",
+    "glovo-device-urn": "[REDACTED]",
+    "glovo-dynamic-session-id": "[REDACTED]",
+    "glovo-language-code": "en",
+    "glovo-location-city-code": "TBI",
+    "glovo-location-country-code": "GE",
+    "origin": "https://glovoapp.com",
+    "referer": "https://glovoapp.com/"
+  },
+  "requestBody": null,
+  "responseBody": {
+    "pagination": {
+      "currentLimit": 12,
+      "next": {
+        "offset": 101000000000
+      }
+    },
+    "orders": [
+      {
+        "orderId": 101000000001,
+        "orderUrn": "glv:purchase:78318a83-56c0-43ee-9c7c-42e214b949e2",
+        "image": {
+          "lightImageId": "dh:stores-glovo/stores/e50573f5fbfa309492c3fe8d34ca8bd73dd9d9bf3492ff8b21970b5ca3407ffe",
+          "darkImageId": "dh:stores-glovo/stores/e50573f5fbfa309492c3fe8d34ca8bd73dd9d9bf3492ff8b21970b5ca3407ffe"
+        },
+        "content": {
+          "title": "Agrohub",
+          "body": [
+            {
+              "type": "TEXT",
+              "data": "1 x მწვანე სალათი/ჰერბია/ 150გრ\n1 x ღორის ანტრიკოტი (აგროჰაბი) / 500 გრ\n1 x ძეხვი მონადირული /აგროჰაბი/ / 500 გრ\n1 x წიწაკა წითელი დაფქული/ოჯახური/ 50გ\n1 x სანელებელი ხორციანი კერძებისთვის /ოჯახური/ 50გ\n1 x შებოლილი პაპრიკა /ოჯახური/ 40გ\n2 x გაზიანი სასმელი ზერო /კოკა-კოლა/500მლ\n1 x სპეც ჩურჩხელა რქაწითელით\n1 x ატამი ქართული / 500 გრ\n1 x ვაშლატამა ყვითელი ქართული / 500 გრ\n1 x მსხალი კარმენი ქართული / 500 გრ\n2 x თინუსის ფილე ზეთში/ ჰენრის ქიჩენი/140გ"
+            }
+          ]
+        },
+        "footer": {
+          "left": {
+            "type": "TEXT",
+            "data": "86,11₾"
+          },
+          "right": null
+        },
+        "style": "DEFAULT",
+        "layoutType": "INACTIVE_ORDER",
+        "isNewOrderTrackingEnabled": false,
+        "courierName": "[REDACTED]"
+      },
+      {
+        "orderId": 101780794763,
+        "orderUrn": "glv:purchase:d78793fe-d92d-404c-89e3-0b6f8eaf7bcc",
+        "image": {
+          "lightImageId": "dh:stores-glovo/stores/9f07b4097e85faed693f37fd774de721416e38a3a91964e3ec9df1dd05dc6669",
+          "darkImageId": "dh:stores-glovo/stores/9f07b4097e85faed693f37fd774de721416e38a3a91964e3ec9df1dd05dc6669"
+        },
+        "content": {
+          "title": "PSP Pharmacy",
+          "body": [
+            {
+              "type": "TEXT",
+              "data": "4 x Zoloft - ზოლოფტი 50მგ 28 ტაბლეტი\n1 x Unisept - უნისეპტი კბილთაშუა ჯაგრისი 0.6მმ 5940\n1 x Balmy - ბალმი აბაზანის ღრუბელი 2502"
+            }
+          ]
+        },
+        "footer": {
+          "left": {
+            "type": "TEXT",
+            "data": "118,34₾"
+          },
+          "right": null
+        },
+        "style": "DEFAULT",
+        "layoutType": "INACTIVE_ORDER",
+        "isNewOrderTrackingEnabled": false,
+        "courierName": "[REDACTED]"
+      },
+      {
+        "orderId": 101780227272,
+        "orderUrn": "glv:purchase:529a7a98-4e9c-4c4f-a4ca-49b496284fdc",
+        "image": {
+          "lightImageId": "dh:stores-glovo/stores/e50573f5fbfa309492c3fe8d34ca8bd73dd9d9bf3492ff8b21970b5ca3407ffe",
+          "darkImageId": "dh:stores-glovo/stores/e50573f5fbfa309492c3fe8d34ca8bd73dd9d9bf3492ff8b21970b5ca3407ffe"
+        },
+        "content": {
+          "title": "Agrohub",
+          "body": [
+            {
+              "type": "TEXT",
+              "data": "3 x ფლავი უზბეკური ქათმის ხორცით /აგროჰაბი/ / 100 გრ\n1 x საქონლის ჩალაღაჯი ძვლიანი /აგროჰაბი/ / 500 გრ\n2 x მოხარშული ლორი / Cavalier Boschi / 1 კგ / 100 გრ\n1 x ყველი იმერული ასაწონი /აგროჰაბი/ / 500 გრ\n1 x იოგურტი პროტეინით /მოვენპიკი/ 400გ\n1 x კვერცხი ქათმის, ფერმის/აგროჰაბი/ 10ც\n1 x ხაჭო 6% /სანტინო/ 320გ\n1 x ჩაი ერთჯერადი შავი რჩეული ელეგანტ ერლ გრეი /დილმა/ 20ც\n1 x ატამი ქართული / 500 გრ\n1 x მსხალი კარმენი ქართული / 500 გრ"
+            }
+          ]
+        },
+        "footer": {
+          "left": {
+            "type": "TEXT",
+            "data": "91,58₾"
+          },
+          "right": null
+        },
+        "style": "DEFAULT",
+        "layoutType": "INACTIVE_ORDER",
+        "isNewOrderTrackingEnabled": false,
+        "courierName": "[REDACTED]"
+      }
+    ]
+  }
+}

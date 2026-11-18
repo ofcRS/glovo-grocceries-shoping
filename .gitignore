@@ -2,6 +2,8 @@
 data/browser-profile/
 data/*.db
 data/*.db-*
+data/discovery/
+data/preferences.md
 .env
 *.local
 
@@ -9,3 +11,9 @@ data/*.db-*
 node_modules/
 dist/
 screenshots/
+
+# SDD scratch
+.superpowers/
+
+# Playwright MCP snapshots and logs (may contain signed-in page content)
+.playwright-mcp/

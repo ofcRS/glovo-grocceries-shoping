@@ -1,0 +1,116 @@
+{
+  "method": "GET",
+  "url": "https://api.glovoapp.com/v3/stores/169869/addresses/595140/search?query=milk&searchId=164a0bcf-83ce-457e-88ad-f9bd80027fa7",
+  "endpoint": "/v3/stores/{id}/addresses/{id}/search",
+  "status": 200,
+  "contentType": "application/json",
+  "requestHeaders": {
+    "accept": "application/json, text/plain, */*",
+    "accept-language": "en",
+    "authorization": "[REDACTED]",
+    "glovo-api-version": "14",
+    "glovo-app-context": "web",
+    "glovo-app-development-state": "prod",
+    "glovo-app-platform": "web",
+    "glovo-app-type": "customer",
+    "glovo-device-urn": "[REDACTED]",
+    "glovo-dynamic-session-id": "[REDACTED]",
+    "glovo-language-code": "en",
+    "glovo-location-city-code": "TBI",
+    "glovo-location-country-code": "GE",
+    "origin": "https://glovoapp.com",
+    "referer": "https://glovoapp.com/"
+  },
+  "requestBody": null,
+  "responseBody": {
+    "totalProducts": 100,
+    "results": [
+      {
+        "products": [
+          {
+            "id": 4611686018469276000,
+            "externalId": "AGH4860051001298",
+            "storeProductId": "AGH4860051001298",
+            "urn": "",
+            "name": "რძე 2.5% /სანტე/ 1 ლ",
+            "description": "ინგრედიენტები (შეფუთვაზე მონიშნული აღნიშვნების მიხედვით: A, B); A: მოხდილი რძე, ნაღები; B: აღდგენილი რძე (წყალი, მშრალი მოხდილი რძე), ნაღები.",
+            "price": 6.3,
+            "priceInfo": {
+              "amount": 6.3,
+              "currencyCode": "GEL",
+              "displayText": "6,30₾"
+            },
+            "imageUrl": "https://glovo.dhmedia.io/image/global-catalog-glovo/nv-global-catalog/ac/f8a37449-6fe6-4279-b638-c4b7b3668f3c.jpg",
+            "imageId": "dh:global-catalog-glovo/nv-global-catalog/ac/f8a37449-6fe6-4279-b638-c4b7b3668f3c.jpg",
+            "attributeGroups": [],
+            "promotion": {
+              "productId": 4611686018469276000,
+              "promotionId": -1,
+              "title": "-1,35₾",
+              "type": "FLAT_PRODUCT",
+              "price": 4.95,
+              "priceInfo": {
+                "amount": 4.95,
+                "currencyCode": "GEL",
+                "displayText": "4,95₾"
+              },
+              "isPrime": false,
+              "promoId": "b50e6f8b-2d1f-4bb7-828c-1639eb2d7df7"
+            },
+            "sponsored": true
+          },
+          {
+            "id": 4611686018469291000,
+            "externalId": "AGH4860051003018",
+            "storeProductId": "AGH4860051003018",
+            "urn": "",
+            "name": "რძე 3.2%/სანტე/ 1ლ",
+            "description": "კვებითი ღირებულება 100 გ პროდუქტში; ენერგეტიკული ღირებულება: 223 კჯ / 53 კკალ; ცხიმი: 2,5 გ; მათ შორის ნაჯერი ცხიმი: 1,5 გ; ნახშირწყლები: 4,7 გ; მათ შორის შაქარი: 4,7 გ; ცილა: 2,9 გ; მარილი: 0 გ.",
+            "price": 6.8,
+            "priceInfo": {
+              "amount": 6.8,
+              "currencyCode": "GEL",
+              "displayText": "6,80₾"
+            },
+            "imageUrl": "https://glovo.dhmedia.io/image/global-catalog-glovo/nv-global-catalog/ac/9d8fff1e-414a-4d0c-8b5a-270ce5d79188.jpg",
+            "imageId": "dh:global-catalog-glovo/nv-global-catalog/ac/9d8fff1e-414a-4d0c-8b5a-270ce5d79188.jpg",
+            "attributeGroups": [],
+            "sponsored": true
+          },
+          {
+            "id": 4611686018469296000,
+            "externalId": "AGH4860051007092",
+            "storeProductId": "AGH4860051007092",
+            "urn": "",
+            "name": "რძე  ულაქტოზო პასტერიზებული, მსუბუქი დღე /სანტე/ 1ლ",
+            "description": "ინგრედიენტები: (შეფუთვაზე დააკვირდით აღნიშვნებს: A, B); A - მოხდილი რძე, ნაღები, ფერმენტი გალაქტაზა; B - აღდგენილი რძე (წყალი, მშრალი უცხიმო რძე), ნაღები, ფერმენტი გალაქტაზა; კვებითი ღირებულება 100 გ. პროდუქტში; ენერგეტიკული ღირებულება 142,38 კჯ/33,9 კკალ; ცხიმები 2,5 გ; მათ შორის ნაჯერი 1,5 გ; ნახშირწყლები 0,1 გ; მათ შორის შაქარი 0,1 გ; ცილები 2,9 გ; მარილი 0 გ.",
+            "price": 8.3,
+            "priceInfo": {
+              "amount": 8.3,
+              "currencyCode": "GEL",
+              "displayText": "8,30₾"
+            },
+            "imageUrl": "https://glovo.dhmedia.io/image/global-catalog-glovo/nv-global-catalog/ac/b9e840e7-dbd0-417b-981a-d8fc0649e942.png",
+            "imageId": "dh:global-catalog-glovo/nv-global-catalog/ac/b9e840e7-dbd0-417b-981a-d8fc0649e942.png",
+            "attributeGroups": [],
+            "promotion": {
+              "productId": 4611686018469296000,
+              "promotionId": -1,
+              "title": "-1,35₾",
+              "type": "FLAT_PRODUCT",
+              "price": 6.95,
+              "priceInfo": {
+                "amount": 6.95,
+                "currencyCode": "GEL",
+                "displayText": "6,95₾"
+              },
+              "isPrime": false,
+              "promoId": "b50e6f8b-2d1f-4bb7-828c-1639eb2d7df7"
+            },
+            "sponsored": true
+          }
+        ]
+      }
+    ]
+  }
+}

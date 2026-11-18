@@ -1,0 +1,89 @@
+{
+  "method": "GET",
+  "url": "https://api.glovoapp.com/v1/stores/169869/addresses/595140/node/store_fees",
+  "endpoint": "/v1/stores/{id}/addresses/{id}/node/store_fees",
+  "status": 200,
+  "contentType": "application/json",
+  "requestHeaders": {
+    "accept": "application/json, text/plain, */*",
+    "accept-language": "en",
+    "authorization": "[REDACTED]",
+    "glovo-api-version": "14",
+    "glovo-app-context": "web",
+    "glovo-app-development-state": "prod",
+    "glovo-app-platform": "web",
+    "glovo-app-type": "customer",
+    "glovo-device-urn": "[REDACTED]",
+    "glovo-dynamic-session-id": "[REDACTED]",
+    "glovo-language-code": "en",
+    "glovo-location-city-code": "TBI",
+    "glovo-location-country-code": "GE",
+    "origin": "https://glovoapp.com",
+    "referer": "https://glovoapp.com/"
+  },
+  "requestBody": null,
+  "responseBody": {
+    "type": "STORE_FEES_V1",
+    "data": {
+      "ranges": [
+        {
+          "lowerBound": 0,
+          "upperBound": 55,
+          "upperBoundInfo": {
+            "amount": 55,
+            "currencyCode": "GEL",
+            "displayText": "55,00₾"
+          },
+          "surchargeInfo": {
+            "amount": 3.99,
+            "currencyCode": "GEL",
+            "displayText": "3,99₾"
+          },
+          "surchargeStrategy": "CAPPED",
+          "plainText": "Reach <b>{1}</b> to avoid an extra fee of <b>{2}</b>",
+          "successText": "Nice, you’re already saving <b>3,99₾</b> 🎉 ",
+          "progressBar": {
+            "basketValue": 55,
+            "isVisible": true,
+            "backgroundColor": {
+              "lightColorHex": "#F2F2F3",
+              "darkColorHex": "#2D2D2E"
+            },
+            "mainColor": {
+              "lightColorHex": "#017963",
+              "darkColorHex": "#62DAC4"
+            }
+          }
+        }
+      ],
+      "tracking": {
+        "surcharge": 3.99,
+        "storeAddressId": 595140,
+        "storeId": 169869,
+        "primeMbsFlag": false
+      },
+      "useDiscountedProductPrices": true,
+      "feesInformation": {
+        "plainText": "Fees information",
+        "action": {
+          "type": "FEES_INFORMATION",
+          "data": {
+            "path": "/v1/stores/169869/addresses/595140/node/fees_breakdown"
+          }
+        },
+        "icon": {
+          "lightImageId": "dh:customer-assets-glovo/mbs/infoCircle_light.svg",
+          "darkImageId": "dh:customer-assets-glovo/mbs/infoCircle_dark.svg",
+          "styles": {
+            "alignment": "LEFT"
+          }
+        }
+      },
+      "backgroundColor": {
+        "lightColorHex": "#FFFFFF",
+        "darkColorHex": "#161617"
+      },
+      "showStoreFooterLayout": false
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "method": "GET",
+  "url": "https://api.glovoapp.com/v3/me",
+  "endpoint": "/v3/me",
+  "status": 200,
+  "contentType": "application/json",
+  "requestHeaders": {
+    "accept": "application/json, text/plain, */*",
+    "accept-language": "en",
+    "authorization": "[REDACTED]",
+    "glovo-api-version": "14",
+    "glovo-app-context": "web",
+    "glovo-app-development-state": "prod",
+    "glovo-app-platform": "web",
+    "glovo-app-type": "customer",
+    "glovo-device-urn": "[REDACTED]",
+    "glovo-dynamic-session-id": "[REDACTED]",
+    "glovo-language-code": "en",
+    "glovo-location-city-code": "tbi",
+    "glovo-location-country-code": "ge",
+    "origin": "https://glovoapp.com",
+    "referer": "https://glovoapp.com/"
+  },
+  "requestBody": null,
+  "responseBody": {
+    "id": 123456,
+    "type": "Customer",
+    "urn": "glv:customer:fd2712c2-c305-4161-83c8-09009ef424ed",
+    "name": "[REDACTED]",
+    "picture": null,
+    "email": "[REDACTED]",
+    "description": null,
+    "facebookId": null,
+    "preferredCityCode": "TBI",
+    "preferredLanguage": "en",
+    "preferredLanguageRegion": "",
+    "locale": "en",
+    "deviceUrn": "[REDACTED]",
+    "analyticsId": null,
+    "mediaCampaign": null,
+    "mediaSource": null,
+    "os": null,
+    "deliveredOrdersCount": 33,
+    "phoneNumber": "[REDACTED]",
+    "companyDetail": null,
+    "virtualBalance": {
+      "balance": 0
+    },
+    "freeOrders": 0,
+    "paymentMethod": "CREDIT_CARD",
+    "paymentWay": "PER_ORDER",
+    "accumulatedDebt": 0,
+    "defaulter": false,
+    "gender": null,
+    "ageMin": null,
+    "ageMax": null,
+    "birthday": null,
+    "privacySettings": null,
+    "permissions": [
+      {
+        "type": "MARKETING_CAMPAIGNS",
+        "title": "Receive special deals and promotions",
+        "enabled": true
+      }
+    ],
+    "dataPrivacyEnabled": true
+  }
+}

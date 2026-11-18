@@ -1,0 +1,287 @@
+{
+  "method": "POST",
+  "url": "https://api.glovoapp.com/v4/stores/169869/addresses/595140/products/4611686018469291378/view?productExternalId=AGH8076809502443",
+  "endpoint": "/v4/stores/{id}/addresses/{id}/products/{id}/view",
+  "status": 200,
+  "contentType": "application/json",
+  "requestHeaders": {
+    "accept": "application/json, text/plain, */*",
+    "accept-language": "en",
+    "authorization": "[REDACTED]",
+    "content-length": "38",
+    "content-type": "application/json",
+    "glovo-api-version": "14",
+    "glovo-app-context": "web",
+    "glovo-app-development-state": "prod",
+    "glovo-app-platform": "web",
+    "glovo-app-type": "customer",
+    "glovo-device-urn": "[REDACTED]",
+    "glovo-dynamic-session-id": "[REDACTED]",
+    "glovo-language-code": "en",
+    "glovo-location-city-code": "TBI",
+    "glovo-location-country-code": "GE",
+    "origin": "https://glovoapp.com",
+    "referer": "https://glovoapp.com/"
+  },
+  "requestBody": {
+    "editingMode": false,
+    "origin": "OTHER"
+  },
+  "responseBody": {
+    "data": {
+      "id": "PRODUCT_VIEW",
+      "type": "PRODUCT_VIEW_SCREEN_V1",
+      "header": {
+        "id": "TOPBAR",
+        "type": "DROP_DOWN_TOOLBAR",
+        "actions": [
+          {
+            "type": "BACK_NAVIGATION",
+            "trigger": "onInteraction"
+          }
+        ],
+        "data": {
+          "title": "ჩხირები პურის  / Mulino Bianco / 300 გ",
+          "styles": {
+            "type": "DEFAULT"
+          }
+        }
+      },
+      "body": {
+        "id": "BODY",
+        "type": "CONTAINER",
+        "actions": [],
+        "data": {
+          "styles": {
+            "type": "DEFAULT"
+          },
+          "elements": [
+            {
+              "type": "MULTIPLE_IMAGES",
+              "actions": [],
+              "data": {
+                "images": [
+                  {
+                    "imageId": "dh:global-catalog-glovo/nv-global-catalog/ac/a195ed94-4ba1-41c2-b4c6-5c5151897d26.jpg"
+                  }
+                ],
+                "styles": {
+                  "type": "DEFAULT"
+                }
+              }
+            },
+            {
+              "type": "TEXT",
+              "actions": [],
+              "data": {
+                "text": "[REDACTED]",
+                "maxLines": 3,
+                "isStrikethrough": false,
+                "styles": {
+                  "type": "PRIMARY_BOLD_24"
+                }
+              }
+            },
+            {
+              "type": "TEXT",
+              "actions": [],
+              "data": {
+                "text": "[REDACTED]",
+                "maxLines": 1,
+                "isStrikethrough": false,
+                "styles": {
+                  "type": "PRIMARY_BOLD_18",
+                  "data": {
+                    "paddingValues": {
+                      "start": "M",
+                      "end": "L",
+                      "bottom": "S"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "footer": {
+        "id": "TOPBAR",
+        "type": "FLOATING_FOOTER",
+        "actions": [],
+        "data": {
+          "styles": {
+            "type": "DEFAULT"
+          },
+          "elements": [
+            {
+              "id": "ADD_TO_CART_BUTTON",
+              "type": "BUTTON",
+              "actions": [
+                {
+                  "type": "ADD_TO_CART",
+                  "trigger": "onInteraction"
+                },
+                {
+                  "type": "UPDATE_ADD_TO_CART_TEXT",
+                  "trigger": "onDisplay",
+                  "data": {
+                    "buttonId": "ADD_TO_CART_BUTTON",
+                    "text": "[REDACTED]",
+                    "textFormat": "Add {quantity} for {price}"
+                  }
+                },
+                {
+                  "type": "EVENT",
+                  "trigger": "onInteraction",
+                  "data": {
+                    "events": [
+                      {
+                        "name": "Product Screen Button Pressed",
+                        "data": {
+                          "storeAddressId": "595140",
+                          "suggestedProductIds": "[]",
+                          "productId": "4611686018469291378",
+                          "isProductCustomization": "false",
+                          "hasSponsoredResults": "false",
+                          "isBeDrivenPDV": "true"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "data": {
+                "text": "[REDACTED]",
+                "isEnabled": true,
+                "styles": {
+                  "type": "PRIMARY_FULL_WIDTH"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "metadata": {
+        "type": "PRODUCT_VIEW_METADATA",
+        "product": {
+          "id": 4611686018469291000,
+          "externalId": "AGH8076809502443",
+          "storeProductId": "AGH8076809502443",
+          "name": "ჩხირები პურის  / Mulino Bianco / 300 გ",
+          "price": 14.95,
+          "imageUrl": "https://glovo.dhmedia.io/image/global-catalog-glovo/nv-global-catalog/ac/a195ed94-4ba1-41c2-b4c6-5c5151897d26.jpg",
+          "imageId": "dh:global-catalog-glovo/nv-global-catalog/ac/a195ed94-4ba1-41c2-b4c6-5c5151897d26.jpg",
+          "images": [],
+          "attributeGroups": [],
+          "sponsored": false,
+          "orderedBefore": false,
+          "restricted": false,
+          "priceInfo": {
+            "amount": 14.95,
+            "displayText": "14,95₾",
+            "currencyCode": "GEL"
+          },
+          "isVariant": false,
+          "tracking": {
+            "increment": 1,
+            "productSaleType": "piece_piece",
+            "isWeightedProduct": false,
+            "popularCustomizationsAvailable": false
+          }
+        },
+        "actions": []
+      },
+      "actions": [
+        {
+          "type": "EVENT",
+          "trigger": "onDismiss",
+          "data": {
+            "events": [
+              {
+                "name": "Product Customisation Dismissed",
+                "data": {
+                  "productId": "4611686018469291378",
+                  "storeAddressId": "595140",
+                  "hasPicture": "true",
+                  "requiredSections": "0",
+                  "availableSections": "0",
+                  "collectionId": "-1",
+                  "categoryId": "-1",
+                  "isBeDrivenPDV": "true"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "SCREEN_EVENT",
+          "trigger": "onDisplay",
+          "data": {
+            "events": [
+              {
+                "name": "Product Customisation",
+                "data": {
+                  "productId": "4611686018469291378",
+                  "storeAddressId": "595140",
+                  "hasPicture": "true",
+                  "requiredSections": "0",
+                  "availableSections": "0",
+                  "isCustomisable": "false",
+                  "searchId": "",
+                  "collectionId": "-1",
+                  "categoryId": "-1",
+                  "productExternalId": "AGH8076809502443",
+                  "productAdditionalInformation": "[]",
+                  "origin": "Other",
+                  "dietaryLabels": "[]",
+                  "isWeightedProduct": "false",
+                  "isBeDrivenPDV": "true"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "trigger": "onDisplay",
+          "data": {
+            "events": [
+              {
+                "name": "product_choice.opened",
+                "data": {
+                  "_eventVersion": "111",
+                  "screenType": "product_choice",
+                  "screenName": "product_choice",
+                  "expeditionType": "delivery",
+                  "productName": "ჩხირები პურის  / Mulino Bianco / 300 გ",
+                  "productQuantity": "1",
+                  "productSKU": "4611686018469291378",
+                  "searchRequestId": "",
+                  "shopId": "595140",
+                  "productHasImage": "true",
+                  "requiredSections": "0",
+                  "availableSections": "0",
+                  "isCustomisable": "false",
+                  "productExternalId": "AGH8076809502443",
+                  "storeProductId": "AGH8076809502443",
+                  "dietaryLabels": "",
+                  "isWeightedProduct": "false",
+                  "popularCarouselAvailable": "false",
+                  "dietaryLabelsAvailable": "false",
+                  "glovoSubCategoryId": "",
+                  "glovoCategoryId": "-1",
+                  "isOrderedBefore": "false",
+                  "qcProductSelectionOrigin": "Cart",
+                  "socialProofTagShown": "false",
+                  "productDiscountShown": "false"
+                },
+                "placeholders": []
+              }
+            ],
+            "actionType": "EVENT"
+          },
+          "type": "PERSEUS_EVENT"
+        }
+      ]
+    }
+  }
+}

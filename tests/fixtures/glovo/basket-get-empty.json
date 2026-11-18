@@ -1,0 +1,26 @@
+{
+  "method": "GET",
+  "url": "https://api.glovoapp.com/v1/authenticated/customers/123456/baskets/stores/169869",
+  "endpoint": "/v1/authenticated/customers/{id}/baskets/stores/{id}",
+  "status": 204,
+  "contentType": "",
+  "requestHeaders": {
+    "accept": "application/json, text/plain, */*",
+    "accept-language": "en",
+    "authorization": "[REDACTED]",
+    "glovo-api-version": "14",
+    "glovo-app-context": "web",
+    "glovo-app-development-state": "prod",
+    "glovo-app-platform": "web",
+    "glovo-app-type": "customer",
+    "glovo-device-urn": "[REDACTED]",
+    "glovo-dynamic-session-id": "[REDACTED]",
+    "glovo-language-code": "en",
+    "glovo-location-city-code": "TBI",
+    "glovo-location-country-code": "GE",
+    "origin": "https://glovoapp.com",
+    "referer": "https://glovoapp.com/"
+  },
+  "requestBody": null,
+  "responseBody": null
+}
